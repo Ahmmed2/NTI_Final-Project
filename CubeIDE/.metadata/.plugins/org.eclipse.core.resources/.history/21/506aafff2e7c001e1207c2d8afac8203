@@ -73,16 +73,7 @@ void HAL_NRF_Send_Number(uint32_t Copy_u32Number) ;
 
  /* Adress of PIPE 1 */
 uint8_t TxAddress[] = {0xEE,0xDD,0xCC,0xBB,0xAA} ;
-
 /* Data to be Sent */
-/*
- * S --> Speed
- * D --> Direction
- * M --> Distance
- * I --> Indication
- *
- */
-
 uint8_t TxData[5] = {'S','D','M','I'}  ;
 uint8_t Debug_Var ;
 
