@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;Main_Final-Project/Core/Inc/Macros&apos; to &apos;Macros.h&apos;" description="Rename resource &apos;Macros&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="Core/Inc/Macros" name="Macros.h" stamp="1698838467874" updateReferences="true"/>
+</session>

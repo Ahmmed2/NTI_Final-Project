@@ -1,0 +1,457 @@
+/*
+ * HAL_LCD.c
+ *
+ *  Created on: Nov 4, 2023
+ *      Author: Ahmed
+ */
+
+#include "HAL/HAL_LCD.h"
+
+/* Port B  --> Data Pins */
+const uint8_t Data[4] = {D7,D6,D5,D4};
+
+
+
+
+void LCD_voidInit(void)
+{
+
+#if LCD_TYPE == Eight_BIT
+
+	/* Set Pin Direction*/
+	DIO_voidSetPinDirection(GPIOB,PIN0_ID, PIN_OUTPUT_ID);
+	DIO_voidSetPinDirection(GPIOB,PIN1_ID, PIN_OUTPUT_ID);
+	DIO_voidSetPinDirection(GPIOB,PIN2_ID, PIN_OUTPUT_ID);
+	/*Set Port Direction*/
+	DIO_voidSetPortDirection(GPIOB,0b11111111);
+
+	/* Initialization */
+
+	/*Delay 30*/
+	HAL_Delay_ms(30);
+	/*  Function Set*/
+	LCD_voidWriteCommand(FUNCTION_SET);
+	/*Delay 2*/
+	HAL_Delay_ms(2);
+	/* Display on/off*/
+	LCD_voidWriteCommand(DisplayON_OFF);
+	/*Delay 2ms*/
+	HAL_Delay_ms(2);
+	/* Clear Display*/
+	LCD_voidWriteCommand(CLEAR_DISPLAY);
+
+#endif
+
+
+#if LCD_TYPE == Four_BIT
+
+	                              /* Initialization */
+
+	/*Delay 50*/
+	HAL_Delay_ms(50);
+
+    /* SLCD_EN_Pind Command Function Set*/
+	LCD_voidWriteCommand_4L(FUNCTION_SET_H);
+	LCD_voidWriteCommand_4L(FUNCTION_SET_L);
+	LCD_voidWriteCommand_4L(FUNCTION_SET_LL);
+    /*Delay 50us*/
+	HAL_Delay_us(50);
+
+    /*SLCD_EN_Pind Command Display on/off*/
+	LCD_voidWriteCommand_4L(DisplayON_OFF_H);
+	LCD_voidWriteCommand_4L(DisplayON_OFF_L);
+    /*Delay 50us*/
+	HAL_Delay_us(50);
+
+    /*SLCD_EN_Pind Command Clear Display*/
+	LCD_voidWriteCommand_4L(CLEAR_DISPLAY_H);
+	LCD_voidWriteCommand_4L(CLEAR_DISPLAY_L);
+	/*Delay 2ms*/
+	HAL_Delay_ms(2);
+
+	/*LCD_EN_Pintry Mode Set */
+	LCD_voidWriteCommand_4L(ENTRY_MODE_H);
+	LCD_voidWriteCommand_4L(ENTRY_MODE_L);
+
+
+
+}
+#endif
+
+
+/* To let the LCD read the data on Pins */
+void LCD_voidLCD_EN_Pinable_4L()
+{
+	HAL_GPIO_WritePin(CONTROL_PORT,EN,GPIO_PIN_SET);
+	HAL_Delay_us(50);
+	HAL_GPIO_WritePin(CONTROL_PORT,EN,GPIO_PIN_RESET);
+}
+
+
+
+/* SLCD_EN_Pind the command Not Data on Data Pins from D7-D4 */
+void LCD_voidWriteCommand_4L(uint8_t Copy_uint8_tValue )
+{
+	uint8_t Local_uint8_tTemp = 0 ;
+
+	HAL_GPIO_WritePin(CONTROL_PORT,RS,GPIO_PIN_RESET);
+
+	 Local_uint8_tTemp = Get_bit(Copy_uint8_tValue,3) ;
+ 	HAL_GPIO_WritePin(DATA_PORT,D7,Local_uint8_tTemp);
+	 Local_uint8_tTemp = Get_bit(Copy_uint8_tValue,2) ;
+ 	HAL_GPIO_WritePin(DATA_PORT,D6,Local_uint8_tTemp);
+	 Local_uint8_tTemp = Get_bit(Copy_uint8_tValue,1) ;
+ 	HAL_GPIO_WritePin(DATA_PORT,D5,Local_uint8_tTemp);
+	 Local_uint8_tTemp = Get_bit(Copy_uint8_tValue,0) ;
+ 	HAL_GPIO_WritePin(DATA_PORT,D4,Local_uint8_tTemp);
+    LCD_voidLCD_EN_Pinable_4L();
+
+
+
+}
+
+
+/* SLCD_EN_Pind Data not Command on the Data Pins */
+void LCD_voidWrite_Data_4L(uint8_t Copy_uint8_tValue )
+{
+
+
+		uint8_t Local_uint8_tTemp,Local_uint8_tCont = 0,Local_uint8_tLoopCounter=0 ;
+
+		Local_uint8_tTemp = (Copy_uint8_tValue>>4);
+
+		for (Local_uint8_tLoopCounter = 0 ; Local_uint8_tLoopCounter<2 ; Local_uint8_tLoopCounter++)
+		{
+		HAL_GPIO_WritePin(CONTROL_PORT,RS,GPIO_PIN_SET);
+		Local_uint8_tCont = Get_bit(Local_uint8_tTemp,3) ;
+		HAL_GPIO_WritePin(DATA_PORT,D7,Local_uint8_tCont);
+		Local_uint8_tCont = Get_bit(Local_uint8_tTemp,2) ;
+		HAL_GPIO_WritePin(DATA_PORT,D6,Local_uint8_tCont);
+		Local_uint8_tCont = Get_bit(Local_uint8_tTemp,1) ;
+		HAL_GPIO_WritePin(DATA_PORT,D5,Local_uint8_tCont);
+		Local_uint8_tCont = Get_bit(Local_uint8_tTemp,0) ;
+		HAL_GPIO_WritePin(DATA_PORT,D4,Local_uint8_tCont);
+		Local_uint8_tTemp = Copy_uint8_tValue ;
+		LCD_voidLCD_EN_Pinable_4L() ;
+		}
+}
+
+
+
+void  LCD_voidSLCD_EN_PindDATA_4L(uint8_t Copy_uint8_tDATA)
+{
+
+	/*SLCD_EN_Pind Data*/
+	LCD_voidWrite_Data_4L(Copy_uint8_tDATA);
+}
+
+
+#endif
+
+
+
+
+
+
+
+#if LCD_TYPE == Eight_BIT
+
+void LCD_voidWriteCommand_8L( uint8_t Copy_uint8_tCommand)
+{
+	/*LCD_RS_Pin=0--->PortB,pin0*/
+    HAL_GPIO_WritePin(GPIOB, PIN0_ID,GPIO_PIN_RESET);
+	/*RW=0--->PortB,pin1*/
+    HAL_GPIO_WritePin(GPIOB, PIN1_ID,GPIO_PIN_RESET);
+    /*SLCD_EN_Pind Data  Data Pins of LCD ---->PortA*/
+   DIO_voidSetPortValue(GPIOB,Copy_uint8_tCommand);
+   /*LCD_EN_Pinable Pulse--->PortB,Pin2*/
+   HAL_GPIO_WritePin(GPIOB, PIN2_ID,PIN_OUTPUT_ID);
+	HAL_Delay_ms(2); //1 second delay
+   HAL_GPIO_WritePin(GPIOB, PIN2_ID,GPIO_PIN_RESET);
+
+}
+
+
+
+void  LCD_voidWriteDATA_8L( uint8_t Copy_uint8_tDATA)
+{
+	/*LCD_RS_Pin=1--->pin0*/
+    HAL_GPIO_WritePin(GPIOB, PIN0_ID,GPIO_PIN_SET);
+ 	/*RW=0--->pin1*/
+    HAL_GPIO_WritePin(GPIOB, PIN1_ID,GPIO_PIN_RESET);
+    /*SLCD_EN_Pind Data*/
+    DIO_voidSetPortValue(GPIOB,Copy_uint8_tDATA);
+
+    /*LCD_EN_Pinable Pulse*/
+    HAL_GPIO_WritePin(GPIOB, PIN2_ID,GPIO_PIN_SET);
+	HAL_Delay_ms(2); //1 second delay
+    HAL_GPIO_WritePin(GPIOB, PIN2_ID,GPIO_PIN_RESET);
+
+
+
+}
+
+
+#endif
+
+
+void LCD_GoToXY(uint8_t Copy_u8_tX, uint8_t Copy_u8_tY)
+{
+		#if (LCD_Type==Eight_BIT)
+
+		uint8_t LOC_Default = DDRAM_BASE_ADDRESS;
+
+		//FiLCD_RS_Pint Line
+		if (Copy_uint8_tX==1)
+		{
+			LOC_Default = FILCD_RS_PinT_LINE_ADDRESS + Copy_uint8_tY ;
+			LCD_voidWriteCommand_8L(LOC_Default);
+		}
+
+		//Second Line
+		else
+		{
+			LOC_Default = SECOND_LINE_ADDRESS + Copy_uint8_tY ;
+
+			LCD_voidWriteCommand_8L(LOC_Default);
+		}
+
+
+		#elif (LCD_Type==Four_BIT)
+
+		uint8_t LOC_Default=DDRAM_BASE_ADDRESS;
+		uint8_t Local_uint8_tTemp = 0 ;
+
+		//FiLCD_RS_Pint Line
+		if (Copy_u8_tX==LINE1)
+		{
+			LOC_Default= SECOND_LINE_ADDRESS + Copy_u8_tY;
+
+			Local_uint8_tTemp = LOC_Default >> 4 ;
+			LCD_voidWriteCommand_4L(Local_uint8_tTemp);
+			Local_uint8_tTemp = LOC_Default ;
+			LCD_voidWriteCommand_4L(Local_uint8_tTemp);
+		}
+
+		//Second Line
+		else if (Copy_u8X==LINE2)
+		{
+			LOC_Default= SECOND_LINE_ADDRESS + Copy_u8_tY;
+			Local_uint8_tTemp = LOC_Default >> 4 ;
+			LCD_voidWriteCommand_4L(Local_uint8_tTemp);
+			Local_uint8_tTemp = LOC_Default ;
+			LCD_voidWriteCommand_4L(Local_uint8_tTemp);
+
+		}
+
+		//Third Line
+		else if (Copy_uint8_tX==LINE3)
+		{
+			LOC_Default= THIRD_LINE_ADDRESS + Copy_uint8_tY;
+			Local_uint8_tTemp = LOC_Default >> 4 ;
+			LCD_voidWriteCommand_4L(Local_uint8_tTemp);
+			Local_uint8_tTemp = LOC_Default ;
+			LCD_voidWriteCommand_4L(Local_uint8_tTemp);
+
+		}
+
+		//Fourth Line
+		else if (Copy_uint8_tX==LINE4)
+		{
+			LOC_Default= FOURTH_LINE_ADDRESS + Copy_uint8_tY;
+			Local_uint8_tTemp = LOC_Default >> 4 ;
+			LCD_voidWriteCommand_4L(Local_uint8_tTemp);
+			Local_uint8_tTemp = LOC_Default ;
+			LCD_voidWriteCommand_4L(Local_uint8_tTemp);
+
+		}
+#endif
+}
+
+
+/* Write Group of CharacteLCD_RS_Pin on LCD */
+void LCD_voidWriteSting(uint8_t *Copy_uint8_tstring , uint8_t Copy_uint8_tLine)
+{
+
+#if (LCD_Type==Eight_BIT)
+
+	uint8_t Local_uint8_tShift = 0 ;
+	while (Copy_uint8_tstring[Local_uint8_tShift]!='\0')
+	{
+		LCD_GoToXY(Copy_uint8_tLine,Local_uint8_tShift);
+		LCD_voidWriteDATA_8L(Copy_uint8_tstring[Local_uint8_tShift]);
+		Local_uint8_tShift++;
+	}
+
+#elif (LCD_Type==Four_BIT)
+
+	uint8_t Local_uint8_tShift = 0 ;
+	while (Copy_uint8_tstring[Local_uint8_tShift]!='\0')
+	{
+		LCD_GoToXY(Copy_uint8_tLine,Local_uint8_tShift);
+		LCD_voidSLCD_EN_PindDATA_4L(Copy_uint8_tstring[Local_uint8_tShift]);
+		Local_uint8_tShift++;
+	}
+
+#endif
+}
+
+
+/* Display NumbeLCD_RS_Pin on LCD */
+void LCD_voidDisplayNumber(uint32_t Copy_uint32_tDATA)
+{
+
+#if LCD_Type==Eight_BIT
+
+	uint8_t  Local_uint32_tCount = 0 , Local_uint32_tCont = 0 ;
+	s8  Local_s8Index = 0 ;
+	uint32_t Local_uint32_tNumbeLCD_RS_Pin[100] ;
+
+	while (Copy_uint32_tDATA != 0)
+	{
+		Local_uint32_tCont =  Copy_uint32_tDATA %10 ;
+		Copy_uint32_tDATA  =  Copy_uint32_tDATA/10 ;
+		Local_uint32_tNumbeLCD_RS_Pin[Local_uint32_tCount] = Local_uint32_tCont ;
+		Local_uint32_tCount++ ;
+	}
+
+	for (Local_s8Index = (Local_uint32_tCount-1) ; Local_s8Index>=0 ; Local_s8Index--)
+	{
+		LCD_voidWriteDATA_8L(Local_uint32_tNumbeLCD_RS_Pin[Local_s8Index]+48);
+	}
+
+
+#elif LCD_Type==Four_BIT
+
+	uint32_t  Local_uint32_tCount = 0 ;
+	uint8_t Local_uint8_tCont = 0 ;
+	int8_t  Local_s8Index = 0 ;
+	uint32_t Local_uint32_tNumbeLCD_RS_Pin[100] ;
+	uint32_t Local_uint8_tTemp = 0 ;
+
+
+	if (Copy_uint32_tDATA == Local_uint8_tTemp )
+	{
+		LCD_voidSLCD_EN_PindDATA_4L(48) ;
+	}
+
+	else
+	{
+
+		while (Copy_uint32_tDATA != 0  )
+		{
+		Local_uint8_tCont =  Copy_uint32_tDATA %10 ;
+		Copy_uint32_tDATA  =  Copy_uint32_tDATA/10 ;
+		Local_uint32_tNumbeLCD_RS_Pin[Local_uint32_tCount] = Local_uint8_tCont ;
+		Local_uint32_tCount++ ;
+		}
+
+
+		for (Local_s8Index = (Local_uint32_tCount-1) ; Local_s8Index>=0 ; Local_s8Index--)
+		{
+		LCD_voidSLCD_EN_PindDATA_4L(Local_uint32_tNumbeLCD_RS_Pin[Local_s8Index]+48) ;
+		}
+
+}
+#endif
+}
+
+
+
+
+/* Undefined Character in CGROM , and want to display it */
+void LCD_voidWriteSpecialCharacter(uint8_t Copy_uint32_tarr[8],uint8_t Copy_uint8_tPattern_Number , uint8_t Copy_uint8_tLine , uint8_t Copy_uint8_tOffset )
+{
+	/* We can write 8 Special Character ,each is 8 Byte */
+	/* FiLCD_RS_Pint 8 Byte in the 64 Byte Start at address 64  */
+
+#if LCD_Type==Eight_BIT
+
+	uint8_t Local_Temp = 0 ;
+	uint8_t Local_Loop_Counter = 0 ;
+
+	Local_Temp = (CGRAM_BASE_ADDRESS+Copy_uint8_tPattern_Number*8 );
+	LCD_voidWriteCommand_8L(Local_Temp);
+
+	for (Local_Loop_Counter =0 ; Local_Loop_Counter < 8 ; Local_Loop_Counter++)
+	{
+		LCD_voidWriteDATA_8L(Copy_uint32_tarr[Local_Loop_Counter]);
+	}
+
+	/* Place To Print Special Character In */
+	LCD_GoToXY(Copy_uint8_tLine,Copy_uint8_tOffset);
+
+	/* Pattern Number */
+	LCD_voidWriteDATA_8L(Copy_uint8_tPattern_Number);
+
+
+#elif LCD_Type==Four_BIT
+
+		uint8_t Local_Temp = 0 ;
+		uint8_t Local_Loop_Counter = 0 ;
+		Local_Temp = (CGRAM_BASE_ADDRESS+Copy_uint8_tPattern_Number*8 ) >> 4 ;
+		LCD_voidWriteCommand_4L(Local_Temp);
+		Local_Temp = (CGRAM_BASE_ADDRESS+Copy_uint8_tPattern_Number*8 );
+		LCD_voidWriteCommand_4L(Local_Temp);
+
+		for (Local_Loop_Counter = 0 ; Local_Loop_Counter<8 ; Local_Loop_Counter++)
+		{
+			LCD_voidSLCD_EN_PindDATA_4L(Copy_uint32_tarr[Local_Loop_Counter]);
+		}
+
+		/* Place To Print Special Character In */
+		LCD_GoToXY(Copy_uint8_tLine,Copy_uint8_tOffset);
+		/* Pattern Number */
+		LCD_voidSLCD_EN_PindDATA_4L(Copy_uint8_tPattern_Number);
+#endif
+}
+
+
+/* To shift the CuLCD_RS_Pinor Right , Left or Change the Display */
+void LCD_voidShift(uint8_t Copy_uint8_tShifttingDirection)
+{
+
+	LCD_voidWriteCommand_4L(SHIFTING_H);
+	if (Copy_uint8_tShifttingDirection == RIGHT)
+	{
+		LCD_voidWriteCommand_4L(SHIFTINGRIGHT_L);
+	}
+
+	else if (Copy_uint8_tShifttingDirection == LEFT)
+	{
+		LCD_voidWriteCommand_4L(SHIFTINGLEFT_L);
+	}
+	else if (Copy_uint8_tShifttingDirection == DISPLAY_LEFT)
+	{
+		LCD_voidWriteCommand_4L(SHIFTING_ENTIRE_DISPLAY_L);
+
+	}
+	else if (Copy_uint8_tShifttingDirection == DISPLAY_RIGHT)
+	{
+		LCD_voidWriteCommand_4L(SHIFTING_ENTIRE_DISPLAY_R);
+	}
+
+}
+
+
+/* To Clear LCD */
+void LCD_voidClear()
+{
+#if LCD_Type==Eight_BIT
+	LCD_voidWriteCommand_8L(CLR_LCD);
+
+
+
+#elif LCD_Type==Four_BIT
+	LCD_voidWriteCommand_4L(CLR_LCD_H);
+	LCD_voidWriteCommand_4L(CLR_LCD_L);
+
+#endif
+}
+
+
+
+
+
+/////////////////////////////////////////////////
+
