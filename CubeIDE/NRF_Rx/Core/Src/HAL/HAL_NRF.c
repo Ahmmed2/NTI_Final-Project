@@ -501,4 +501,3 @@ void NRF_voidResetNRF(uint8_t Copy_u8REG)
 	NRF_voidWriteByteReg(FEATURE, 0);
 	}
 }
-

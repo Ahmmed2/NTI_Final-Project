@@ -41,9 +41,14 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-SPI_HandleTypeDef hspi1;
 
-UART_HandleTypeDef huart1;
+SPI_HandleTypeDef hspi1   ;
+UART_HandleTypeDef huart1 ;
+
+
+/* Data */
+
+
 
 /* USER CODE BEGIN PV */
 
@@ -55,7 +60,8 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_USART1_UART_Init(void);
- void HAL_USART1_Send_Number(uint32_t Copy_u32Number) ;
+void HAL_USART1_Send_Number(uint32_t Copy_u32Number) ;
+void HAL_NRF_Send_Number(uint32_t Copy_u32Number) ;
 
 /* USER CODE BEGIN PFP */
 
@@ -64,10 +70,11 @@ static void MX_USART1_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
  /* Adress of PIPE 1 */
 uint8_t TxAddress[] = {0xEE,0xDD,0xCC,0xBB,0xAA} ;
 /* Data to be Sent */
-uint8_t TxData[] = "Hello" ;
+uint8_t TxData[5] = {'S','D','M','I'}  ;
 uint8_t Debug_Var ;
 
 /* USER CODE END 0 */
@@ -107,6 +114,12 @@ int main(void)
   NRF_voidTransmitterMode(TxAddress, 10 ) ;
 
   /* USER CODE BEGIN 2 */
+  DataTransfer_t Data_Tx ;
+
+  Data_Tx.Speed 	 = 25 			;  /* Input from MOTION Branch     */
+  Data_Tx.Direction  = FORWARD 		;  /* Input from MOTION Branch     */
+  Data_Tx.Distance 	 = 55 			;  /* Input from ULTRASONIC Branch */
+  Data_Tx.Indication = SUDDEN_BREAK ;
 
   /* USER CODE END 2 */
 
@@ -118,7 +131,17 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-	  NRF_voidSendData(TxData) ;
+	  NRF_voidSendData(TxData[0]) ;
+	  HAL_NRF_Send_Number(Data_Tx.Speed)  ;
+
+	  NRF_voidSendData(TxData[1]) ;
+	  HAL_NRF_Send_Number(Data_Tx.Direction)  ;
+
+	  NRF_voidSendData(TxData[2]) ;
+	  HAL_NRF_Send_Number(Data_Tx.Distance)  ;
+
+	  NRF_voidSendData(TxData[3]) ;
+	  HAL_NRF_Send_Number(Data_Tx.Indication)  ;
 
 	  /***** For Debugg Purpose *****/
 
@@ -146,7 +169,7 @@ int main(void)
 	  HAL_USART1_Send_Number(Debug_Var) ;
 	  HAL_UART_Transmit(&huart1, "\r\n", 2, 100) ;*/
 
-	  HAL_Delay(2000) ;
+
 
 	  /**********************************************/
 
@@ -228,6 +251,31 @@ static void MX_SPI1_Init(void)
 
   /* USER CODE END SPI1_Init 2 */
 
+}
+void HAL_NRF_Send_Number(uint32_t Copy_u32Number)
+{
+
+	uint8_t Local_u8Number_Element = 0  ;
+	uint8_t Main_Arr[5] 				;
+	uint8_t Reverted_Arr[5] 			;
+
+    /* Reversing the digits */
+    while (Copy_u32Number > 0)
+    {
+    	Main_Arr[Local_u8Number_Element] = (Copy_u32Number % 10) + 48 ;
+    	Copy_u32Number = Copy_u32Number / 10 ;
+    	Local_u8Number_Element++ ;
+    }
+
+
+    /* Copy the elements of Main_Arr --> Reverted_Arr then send them to UART in correct order */
+
+    for (uint8_t Revert_Index = 0 ; Revert_Index<Local_u8Number_Element ; Revert_Index++)
+    {
+    	Reverted_Arr[Revert_Index] = Main_Arr[Local_u8Number_Element-Revert_Index-1] ;
+    }
+
+    	NRF_voidSendData(Reverted_Arr) ;
 }
 
 /**

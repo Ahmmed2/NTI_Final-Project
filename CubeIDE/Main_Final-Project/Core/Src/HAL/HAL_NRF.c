@@ -316,7 +316,6 @@ void NRF_voidSendData (uint8_t * Data )
 	{
 		/* Put Any-Condition To Check */
 
-		HAL_Delay(1000) ;
 		Temp = FLUSH_TX ;
 		/* Flush TX */
 		NRF_voidCommandSet(Temp);
@@ -513,4 +512,3 @@ void NRF_voidResetNRF(uint8_t Copy_u8REG)
 	NRF_voidWriteByteReg(FEATURE, 0);
 	}
 }
-

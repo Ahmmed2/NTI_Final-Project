@@ -22,6 +22,9 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "HAL/HAL_NRF.h"
+#include "string.h"
+#include "strings.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -110,10 +113,11 @@ int main(void)
 	  if (NRF_u8IsDataAvailable(1) == 1)
 	  {
 		  NRF_voidReceiveData(RxData);
-		  HAL_UART_Transmit(&huart1, RxData, 6, 1000);
+		  HAL_UART_Transmit(&huart1, RxData, strlen((char *)RxData), 1000);
 		  HAL_UART_Transmit(&huart1, "\r\n", 2, 1000);
 
 		  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_13) ;
+		  HAL_Delay(1000) ;
 
 	  }
 

@@ -74,6 +74,23 @@
 /* SPI1 Handler */
 #define NRF_SPI1						&hspi1
 
+
+/* Data Defines */
+
+/* Directions */
+#define FORWARD					0
+#define BACKWARD				1
+#define LEFT					2
+#define RIGHT  					3
+///////////////////////////////////
+
+/* Indication */
+#define SUDDEN_BREAK			0
+#define	TRAFFIC					1
+#define	OBSTACLE				2
+///////////////////////////////////
+
+
 /***************Macros Definitions END   *****************/
 
 /***************Macros Functions Definitions Start *****************/
@@ -85,6 +102,16 @@
 
 /* SPI1 Handler */
 extern SPI_HandleTypeDef hspi1;
+
+/* Type of Data to be sent */
+typedef struct
+{
+	uint8_t Speed    		;
+	uint8_t Direction       ;
+	uint8_t Distance     	;
+	uint8_t Indication      ;
+
+}DataTransfer_t;
 
 
 /***************Data Type Definitions END   *****************/

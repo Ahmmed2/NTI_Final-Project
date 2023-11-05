@@ -86,7 +86,6 @@
 /* SPI1 Handler */
 extern SPI_HandleTypeDef hspi1;
 
-
 /***************Data Type Definitions END   *****************/
 
 
@@ -117,6 +116,7 @@ void NRF_voidSendData (uint8_t * Data ) 											;
 void NRF_voidReceiverMode (uint8_t * Address ,uint8_t Copy_u8Channel_Number )		;
 uint8_t NRF_u8IsDataAvailable (uint8_t Copy_u8PipeNum)								;
 void NRF_voidReceiveData (uint8_t * Data )											;
+void NRF_voidSelectPIPE (uint8_t Copy_u8PIPE_Number)								;
 
 /* Reset NRF */
 void NRF_voidResetNRF(uint8_t Copy_u8REG)											;
