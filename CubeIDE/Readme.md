@@ -2,8 +2,8 @@
 
 ## RCC will be configured as HSE 8MHZ 
 
-##Pins Configuration
+## Pins Configuration
 
-###GSM module 
+### GSM module 
 - PinB10 -> UART3 TX
 - PinB11 -> UART3 RX
