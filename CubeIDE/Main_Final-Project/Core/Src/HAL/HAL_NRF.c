@@ -286,7 +286,7 @@ void NRF_voidTransmitterMode (uint8_t * Address ,uint8_t Copy_u8Channel_Number )
  * note :
  *
  */
-void NRF_voidSendData (uint8_t * Data )
+void NRF_voidSendData (uint8_t * Data , uint8_t Copy_u8SizeinByte )
 {
 	/* Chip Select  */
 	NRF_ChipSelect() ;
@@ -297,7 +297,9 @@ void NRF_voidSendData (uint8_t * Data )
    HAL_SPI_Transmit(NRF_SPI1, &Temp, 1 , 100) ;
 
    /* Send Pay-Load "Data" */
-   HAL_SPI_Transmit(NRF_SPI1, Data, 32 , 1000) ;
+   HAL_SPI_Transmit(NRF_SPI1, Data, Copy_u8SizeinByte , 1000) ;
+
+   HAL_UART_Transmit(&huart1, Data,Copy_u8SizeinByte, 100);
 
 	/* Chip UnSelect  */
 	NRF_ChipUnSelect() ;

@@ -13,6 +13,8 @@
 
 #include "stm32f1xx_hal.h"
 #include "Macros.h"
+#include "string.h"
+#include "strings.h"
 
 /***************Include END *****************/
 
@@ -138,7 +140,7 @@ void NRF_voidInit(void) 															;
 
 /* Transmit Data */
 void NRF_voidTransmitterMode (uint8_t * Address ,uint8_t Copy_u8Channel_Number ) 	;
-void NRF_voidSendData (uint8_t * Data ) 											;
+void NRF_voidSendData (uint8_t * Data , uint8_t Copy_u8SizeinByte )					;
 
 /* Receive Data */
 void NRF_voidReceiverMode (uint8_t * Address ,uint8_t Copy_u8Channel_Number )		;

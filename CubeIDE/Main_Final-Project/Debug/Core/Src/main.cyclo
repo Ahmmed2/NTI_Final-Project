@@ -1,8 +1,8 @@
-../Core/Src/main.c:86:5:main	1
-../Core/Src/main.c:174:6:SystemClock_Config	3
-../Core/Src/main.c:210:13:MX_SPI1_Init	2
-../Core/Src/main.c:242:6:HAL_NRF_Send_Number	3
-../Core/Src/main.c:274:7:HAL_USART1_Send_Number	3
-../Core/Src/main.c:306:13:MX_USART1_UART_Init	2
-../Core/Src/main.c:339:13:MX_GPIO_Init	1
-../Core/Src/main.c:403:6:Error_Handler	1
+../Core/Src/main.c:95:5:main	1
+../Core/Src/main.c:197:6:SystemClock_Config	3
+../Core/Src/main.c:233:13:MX_SPI1_Init	2
+../Core/Src/main.c:265:6:HAL_NRF_Send_Number	3
+../Core/Src/main.c:297:7:HAL_USART1_Send_Number	3
+../Core/Src/main.c:329:13:MX_USART1_UART_Init	2
+../Core/Src/main.c:362:13:MX_GPIO_Init	1
+../Core/Src/main.c:426:6:Error_Handler	1

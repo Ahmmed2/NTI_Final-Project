@@ -112,13 +112,18 @@ int main(void)
     /* USER CODE BEGIN 3 */
 	  if (NRF_u8IsDataAvailable(1) == 1)
 	  {
-		  NRF_voidReceiveData(RxData);
-		  HAL_UART_Transmit(&huart1, RxData, strlen((char *)RxData), 1000);
-		  HAL_UART_Transmit(&huart1, "\r\n", 2, 1000);
 
+		  NRF_voidReceiveData(RxData);
+		  HAL_UART_Transmit(&huart1, &(RxData[0]), 1, 100);
+		  HAL_UART_Transmit(&huart1, "\r\n", 2, 100);
+		  HAL_Delay(500) ;
+
+
+		  if (RxData[0] == 'S')
+		  {
 		  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_13) ;
 		  HAL_Delay(1000) ;
-
+		  }
 	  }
 
   }

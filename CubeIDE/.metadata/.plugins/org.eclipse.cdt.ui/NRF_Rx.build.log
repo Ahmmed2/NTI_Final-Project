@@ -1,33 +1,12 @@
-00:25:37 **** Incremental Build of configuration Debug for project NRF_Rx ****
+23:41:31 **** Incremental Build of configuration Debug for project NRF_Rx ****
 make -j12 all 
-arm-none-eabi-gcc "../Core/Src/HAL/HAL_NRF.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/HAL/HAL_NRF.d" -MT"Core/Src/HAL/HAL_NRF.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/HAL/HAL_NRF.o"
-arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
-../Core/Src/main.c: In function 'main':
-../Core/Src/main.c:117:46: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
-  117 |                   HAL_UART_Transmit(&huart1, "\r\n", 2, 1000);
-      |                                              ^~~~~~
-      |                                              |
-      |                                              char *
-In file included from ../Core/Inc/stm32f1xx_hal_conf.h:338,
-                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:29,
-                 from ../Core/Inc/main.h:30,
-                 from ../Core/Src/main.c:20:
-../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h:749:79: note: expected 'const uint8_t *' {aka 'const unsigned char *'} but argument is of type 'char *'
-  749 | HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, const uint8_t *pData, uint16_t Size, uint32_t Timeout);
-      |                                                                ~~~~~~~~~~~~~~~^~~~~
-arm-none-eabi-gcc -o "NRF_Rx.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\Courses\NTI\NTI_Final-Project\NTI_Final-Project\CubeIDE\NRF_Rx\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="NRF_Rx.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
-Finished building target: NRF_Rx.elf
- 
 arm-none-eabi-size   NRF_Rx.elf 
-arm-none-eabi-objdump -h -S  NRF_Rx.elf  > "NRF_Rx.list"
    text	   data	    bss	    dec	    hex	filename
-  10288	     28	   1764	  12080	   2f30	NRF_Rx.elf
+  10276	     28	   1764	  12068	   2f24	NRF_Rx.elf
 Finished building: default.size.stdout
- 
-Finished building: NRF_Rx.list
  
 arm-none-eabi-objcopy -O ihex NRF_Rx.elf NRF_Rx.hex
  
 
-00:25:39 Build Finished. 0 errors, 1 warnings. (took 1s.429ms)
+23:41:32 Build Finished. 0 errors, 0 warnings. (took 920ms)
 
