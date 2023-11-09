@@ -1,0 +1,20 @@
+/*
+ * Ultrasonic.c
+ *
+ *  Created on: Nov 9, 2023
+ *      Author: Ahmed
+ */
+
+
+
+#include "HAL/Ultrasonic.h"
+
+
+
+void HAL_voidUltraSonic (uint16_t *Distance)
+{
+
+
+/* TODO  ****************/
+
+}

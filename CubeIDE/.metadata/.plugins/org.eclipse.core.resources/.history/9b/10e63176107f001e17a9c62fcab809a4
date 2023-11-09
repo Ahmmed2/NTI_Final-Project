@@ -1,0 +1,32 @@
+/*
+ * Ultrasonic.c
+ *
+ *  Created on: Nov 9, 2023
+ *      Author: Ahmed
+ */
+
+
+
+#include "HAL/Ultrasonic.h"
+
+
+
+void HAL_voidUltraSonic (uint16_t *UltraSonic_Reading)
+{
+
+
+/* TODO  ****************/
+
+}
+
+uint8_t HAL_UltraSonic_Decision(uint16_t *UltraSonic_Reading)
+{
+
+	uint8_t Return_Value = 0 ;
+
+
+
+
+	return Return_Value ;
+
+}

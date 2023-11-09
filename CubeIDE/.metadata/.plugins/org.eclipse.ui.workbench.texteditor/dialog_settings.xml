@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="NRF_voidResetNRF"/>
+		<item key="selection" value=" HAL_TIM_OC"/>
 		<item key="wrap" value="false"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value=" HAL_TIM_OC"/>
+			<item value=" HAL_TIM_OC_Msp"/>
+			<item value=" HAL_TIM_OC_MspInit"/>
+			<item value="stop"/>
+			<item value="Stop"/>
+			<item value="HAL_TIM_OC_Msp"/>
+			<item value="HAL_TIM_OC_MspStop"/>
+			<item value="HAL_TIM_OC_MspInit"/>
+			<item value="callback"/>
 			<item value="NRF_voidResetNRF"/>
 			<item value="u8"/>
 			<item value="u32"/>
 			<item value="PORTB_ID"/>
 			<item value="PORTA_ID"/>
 			<item value="EN"/>
-			<item value="RS"/>
-			<item value="PIN_LOW"/>
-			<item value="PIN_HIGH"/>
-			<item value="_delay"/>
-			<item value="DIO_voidSetPinValue"/>
-			<item value="NRF_u8ReadByteReg"/>
-			<item value="NRF_voidCommandSet"/>
-			<item value="HAL_SPI_Receive"/>
-			<item value="NRF_voidReadMultiByteReg"/>
 		</list>
 		<list key="replacehistory">
 			<item value="uint8_t"/>
@@ -39,8 +39,8 @@
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
-		<item key="DIALOG_X_ORIGIN" value="1103"/>
-		<item key="DIALOG_Y_ORIGIN" value="239"/>
+		<item key="DIALOG_X_ORIGIN" value="1401"/>
+		<item key="DIALOG_Y_ORIGIN" value="232"/>
 		<item key="DIALOG_WIDTH" value="414"/>
 		<item key="DIALOG_HEIGHT" value="454"/>
 		<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
