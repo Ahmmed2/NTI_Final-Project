@@ -1,0 +1,12 @@
+13:39:39 **** Incremental Build of configuration Debug for project NRF_Rx ****
+make -j12 all 
+arm-none-eabi-size   NRF_Rx.elf 
+   text	   data	    bss	    dec	    hex	filename
+  10280	     28	   1764	  12072	   2f28	NRF_Rx.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objcopy -O ihex NRF_Rx.elf NRF_Rx.hex
+ 
+
+13:39:40 Build Finished. 0 errors, 0 warnings. (took 1s.72ms)
+
