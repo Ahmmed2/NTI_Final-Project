@@ -2298,3 +2298,52 @@ org.eclipse.swt.SWTException: Widget is disposed
 	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:659)
 	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:596)
 	at org.eclipse.equinox.launcher.Main.run(Main.java:1467)
+!SESSION 2023-11-09 18:01:22.844 -----------------------------------------------
+eclipse.buildId=Version 1.13.1
+java.version=17.0.6
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2023-11-09 18:01:29.655
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2023-11-09 18:01:29.656
+!MESSAGE Log4j2 initialized with config file D:\Courses\NTI\NTI_Final-Project\NTI_Final-Project\CubeIDE\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.buildanalyzer.ui 1 0 2023-11-09 18:01:32.710
+!MESSAGE Failed to parse map file
+!STACK 0
+java.io.FileNotFoundException: D:\Courses\NTI\NTI_Final-Project\NTI_Final-Project\CubeIDE\NRF_Rx\Debug\NRF_Rx.map (The system cannot find the file specified)
+	at java.base/java.io.FileInputStream.open0(Native Method)
+	at java.base/java.io.FileInputStream.open(FileInputStream.java:216)
+	at java.base/java.io.FileInputStream.<init>(FileInputStream.java:157)
+	at java.base/java.io.FileInputStream.<init>(FileInputStream.java:111)
+	at java.base/java.io.FileReader.<init>(FileReader.java:60)
+	at elf_analyzer.datamodel.BuildDataProviderMap.readFile(BuildDataProviderMap.java:55)
+	at elf_analyzer.datamodel.BuildDataProviderMap.compute(BuildDataProviderMap.java:358)
+	at elf_analyzer.datamodel.BuildDataProviderMap.computeMemConfig(BuildDataProviderMap.java:402)
+	at elf_analyzer.datamodel.BuildData.compute(BuildData.java:81)
+	at elf_analyzer.ElfAnalyzerView.inputChanged(ElfAnalyzerView.java:265)
+	at elf_analyzer.ElfAnalyzerView.lambda$3(ElfAnalyzerView.java:418)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+
+!ENTRY com.st.stm32cube.ide.mcu.buildanalyzer.ui 1 0 2023-11-09 18:01:33.777
+!MESSAGE Failed to parse map file
+!STACK 0
+java.io.FileNotFoundException: D:\Courses\NTI\NTI_Final-Project\NTI_Final-Project\CubeIDE\NRF_Rx\Debug\NRF_Rx.map (The system cannot find the file specified)
+	at java.base/java.io.FileInputStream.open0(Native Method)
+	at java.base/java.io.FileInputStream.open(FileInputStream.java:216)
+	at java.base/java.io.FileInputStream.<init>(FileInputStream.java:157)
+	at java.base/java.io.FileInputStream.<init>(FileInputStream.java:111)
+	at java.base/java.io.FileReader.<init>(FileReader.java:60)
+	at elf_analyzer.datamodel.BuildDataProviderMap.readFile(BuildDataProviderMap.java:55)
+	at elf_analyzer.datamodel.BuildDataProviderMap.compute(BuildDataProviderMap.java:358)
+	at elf_analyzer.datamodel.BuildDataProviderMap.computeLinkerSymbols(BuildDataProviderMap.java:410)
+	at elf_analyzer.datamodel.BuildData.compute(BuildData.java:104)
+	at elf_analyzer.ElfAnalyzerView.inputChanged(ElfAnalyzerView.java:265)
+	at elf_analyzer.ElfAnalyzerView.lambda$3(ElfAnalyzerView.java:418)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2023-11-09 18:01:36.056
+!MESSAGE Started RMI Server, listening on port 41337
