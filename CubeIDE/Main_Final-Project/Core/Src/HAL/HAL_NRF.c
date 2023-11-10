@@ -10,6 +10,8 @@
 #include "HAL/HAL_NRF.h"
 
 uint8_t Counter = 0 ;
+uint8_t Send_Data[10] ;
+
 extern UART_HandleTypeDef huart1;
 
 void NRF_ChipSelect (void)
@@ -286,8 +288,14 @@ void NRF_voidTransmitterMode (uint8_t * Address ,uint8_t Copy_u8Channel_Number )
  * note :
  *
  */
-void NRF_voidSendData (uint8_t * Data , uint8_t Copy_u8SizeinByte )
+
+void NRF_voidSendData (uint8_t * Data , uint8_t Copy_u8SizeinByte  )
 {
+	/* Counter of For Loop */
+	uint8_t Local_Counter = 0 ;
+	/* Array Index */
+	uint8_t Local_ArrayIndex = 0 ;
+
 	/* Chip Select  */
 	NRF_ChipSelect() ;
 
@@ -296,10 +304,29 @@ void NRF_voidSendData (uint8_t * Data , uint8_t Copy_u8SizeinByte )
    /* Get the Receiver ready , Next Pay-Load is Data */
    HAL_SPI_Transmit(NRF_SPI1, &Temp, 1 , 100) ;
 
-   /* Send Pay-Load "Data" */
-   HAL_SPI_Transmit(NRF_SPI1, Data, Copy_u8SizeinByte , 1000) ;
+   for (Local_Counter = 0 ; Local_Counter<Copy_u8SizeinByte ; Local_Counter++ )
+   {
+	   /* Number */
+	   if ( ((Data[Local_Counter] +36) < 100))
+	   {
+		   /* Number is to be sent */
+		   Local_ArrayIndex = HAL_NRF_Send_Number( Data[Local_Counter] , Local_Counter) ;
 
-   HAL_UART_Transmit(&huart1, Data,Copy_u8SizeinByte, 100);
+	   }
+	   /* Character */
+	   else
+	   {
+		   Send_Data[Local_ArrayIndex] = Data[Local_Counter]  ;
+		   Local_ArrayIndex ++ ;
+	   }
+   }
+
+   /* Last Element is + */
+   Send_Data[Local_ArrayIndex] = '+' ;
+
+   /* Send Pay-Load "Data" */
+   HAL_SPI_Transmit(NRF_SPI1, Send_Data, (Local_ArrayIndex+1) , 10000) ;
+
 
 	/* Chip UnSelect  */
 	NRF_ChipUnSelect() ;
@@ -329,12 +356,61 @@ void NRF_voidSendData (uint8_t * Data , uint8_t Copy_u8SizeinByte )
 		HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_12) ;
 		HAL_Delay(1000) ;
 
-
 	}
+
+		/* Reinitialize the array with Zeros */
+	   for (Local_Counter = 0 ; Local_Counter<10 ; Local_Counter++ )
+	   {
+		   Send_Data[Local_Counter] = 0 ;
+	   }
+
 
 
 }
 
+/**
+ * Brief :  Send Number through NRF .
+ *
+ * Parameters : Number that you want to send --> Copy_u32Number
+ * Synchronous
+ * Non reentrant
+ * Return : NONE
+ * note :
+ *
+ */
+
+uint8_t HAL_NRF_Send_Number(uint32_t Copy_u32Number , uint8_t Copy_u8Number_Index)
+{
+
+	uint8_t Local_u8Number_Element = 0  ;
+	uint8_t Main_Arr[5] = {0}			;
+
+	if (Copy_u32Number == 0)
+	{
+		Local_u8Number_Element++ ;
+	}
+	else
+	{
+    /* Splitting Number */
+    while (Copy_u32Number > 0)
+    {
+    	Main_Arr[Local_u8Number_Element] = (Copy_u32Number % 10) + 48 ;
+    	Copy_u32Number = Copy_u32Number / 10 ;
+    	Local_u8Number_Element++ ;
+    }
+
+	}
+    /* Copy the elements of Main_Arr --> Reverted_Arr then send them to UART in correct order */
+
+    for (uint8_t Revert_Index = 0 ; Revert_Index<Local_u8Number_Element ; Revert_Index++)
+    {
+    	Send_Data[Copy_u8Number_Index] = Main_Arr[Local_u8Number_Element-Revert_Index-1] ;
+    	Copy_u8Number_Index ++ ;
+    }
+
+    return Copy_u8Number_Index ;
+
+}
 
 /**
  * Brief :  Receive Data from NRF  .
@@ -514,3 +590,6 @@ void NRF_voidResetNRF(uint8_t Copy_u8REG)
 	NRF_voidWriteByteReg(FEATURE, 0);
 	}
 }
+
+
+

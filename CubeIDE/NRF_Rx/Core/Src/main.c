@@ -43,8 +43,8 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-SPI_HandleTypeDef hspi1;
 
+SPI_HandleTypeDef hspi1;
 UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
@@ -64,6 +64,7 @@ static void MX_USART1_UART_Init(void);
 /* USER CODE BEGIN 0 */
 uint8_t RxAddress[] = {0xEE,0xDD,0xCC,0xBB,0xAA} ;
 uint8_t RxData[32]  ;
+uint8_t Size_In_Bytes = 0 ;
 /* USER CODE END 0 */
 
 /**
@@ -97,7 +98,7 @@ int main(void)
   MX_SPI1_Init();
   MX_USART1_UART_Init();
   NRF_voidInit();
-  NRF_voidReceiverMode(RxAddress, 10 ) ;
+  NRF_voidReceiverMode(RxAddress, CHANNEL_NUMBER ) ;
 
   /* USER CODE BEGIN 2 */
 
@@ -112,18 +113,16 @@ int main(void)
     /* USER CODE BEGIN 3 */
 	  if (NRF_u8IsDataAvailable(1) == 1)
 	  {
-
 		  NRF_voidReceiveData(RxData);
-		  HAL_UART_Transmit(&huart1, &(RxData[0]), 1, 1000);
+		  while (RxData[Size_In_Bytes] != '+' )
+		  {
+			  Size_In_Bytes ++ ;
+		  }
+		  HAL_UART_Transmit(&huart1, RxData, Size_In_Bytes, 1000);
 		  HAL_UART_Transmit(&huart1, "\r\n", 2, 1000);
+		  Size_In_Bytes = 0 ;
 		  HAL_Delay(500) ;
 
-
-		  if (RxData[0] == 'S')
-		  {
-		  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_13) ;
-		  HAL_Delay(1000) ;
-		  }
 	  }
 
   }

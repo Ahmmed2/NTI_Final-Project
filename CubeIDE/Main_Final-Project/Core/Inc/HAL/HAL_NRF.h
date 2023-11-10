@@ -80,16 +80,16 @@
 /* Data Defines */
 
 /* Directions */
-#define FORWARD					0
-#define BACKWARD				1
-#define LEFT					2
-#define RIGHT  					3
+#define FORWARD					1
+#define BACKWARD				2
+#define LEFT					3
+#define RIGHT  					4
 ///////////////////////////////////
 
 /* Indication */
-#define SUDDEN_BREAK			0
-#define	TRAFFIC					1
-#define	OBSTACLE				2
+#define SUDDEN_BREAK			1
+#define	TRAFFIC					2
+#define	OBSTACLE				3
 ///////////////////////////////////
 
 
@@ -141,6 +141,7 @@ void NRF_voidInit(void) 															;
 /* Transmit Data */
 void NRF_voidTransmitterMode (uint8_t * Address ,uint8_t Copy_u8Channel_Number ) 	;
 void NRF_voidSendData (uint8_t * Data , uint8_t Copy_u8SizeinByte )					;
+uint8_t HAL_NRF_Send_Number(uint32_t Copy_u32Number , uint8_t Copy_u8Number_Index)  ;
 
 /* Receive Data */
 void NRF_voidReceiverMode (uint8_t * Address ,uint8_t Copy_u8Channel_Number )		;

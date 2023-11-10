@@ -74,6 +74,9 @@
 /* SPI1 Handler */
 #define NRF_SPI1						&hspi1
 
+/* Channel Number */
+#define CHANNEL_NUMBER 					  10
+
 /***************Macros Definitions END   *****************/
 
 /***************Macros Functions Definitions Start *****************/

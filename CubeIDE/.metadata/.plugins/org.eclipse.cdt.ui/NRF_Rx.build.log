@@ -1,9 +1,9 @@
-18:11:22 **** Incremental Build of configuration Debug for project NRF_Rx ****
+21:50:34 **** Incremental Build of configuration Debug for project NRF_Rx ****
 make -j12 all 
 arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
 ../Core/Src/main.c: In function 'main':
-../Core/Src/main.c:118:46: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
-  118 |                   HAL_UART_Transmit(&huart1, "\r\n", 2, 1000);
+../Core/Src/main.c:122:46: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
+  122 |                   HAL_UART_Transmit(&huart1, "\r\n", 2, 1000);
       |                                              ^~~~~~
       |                                              |
       |                                              char *
@@ -20,7 +20,7 @@ Finished building target: NRF_Rx.elf
 arm-none-eabi-size   NRF_Rx.elf 
 arm-none-eabi-objdump -h -S  NRF_Rx.elf  > "NRF_Rx.list"
    text	   data	    bss	    dec	    hex	filename
-  10280	     28	   1764	  12072	   2f28	NRF_Rx.elf
+  10240	     28	   1764	  12032	   2f00	NRF_Rx.elf
 Finished building: default.size.stdout
  
 Finished building: NRF_Rx.list
@@ -28,5 +28,5 @@ Finished building: NRF_Rx.list
 arm-none-eabi-objcopy -O ihex NRF_Rx.elf NRF_Rx.hex
  
 
-18:11:23 Build Finished. 0 errors, 1 warnings. (took 1s.364ms)
+21:50:38 Build Finished. 0 errors, 1 warnings. (took 4s.317ms)
 
