@@ -37,3 +37,7 @@ MOSI ->		PA7
 #### Ultrasonic 4
 - TRIG->GPIOA->PIN12
 - ECHO->GPIOA->PIN13
+
+### Bluetooth Module
+- UART_Rx -> PIN_A9 or PIN_B6
+- UART_Tx -> PIN_A10 or PIN_B7
