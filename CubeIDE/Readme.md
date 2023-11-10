@@ -17,26 +17,26 @@ MOSI ->		PA7
 - PinB11 -> UART3 RX
 
 ### Motion 
-- Motor->1 pins En1->(Timer1_CH1)->GPIOA -> PIN8
-- IN1-> GPIOA -> PIN11
-- IN2-> GPIOA -> PIN12
-- Motor->2 pins En2->GPIOB -> PIN12
-- IN3-> GPIOB -> PIN8
-- IN4-> GPIOB -> PIN9
+- Motor->1 pins En1->(Timer1_CH1)->GPIOA -> PIN_A8
+- IN1-> GPIOA -> PIN_A11
+- IN2-> GPIOA -> PIN_A12
+- Motor->2 pins En2->GPIOB -> PIN_B12
+- IN3-> GPIOB -> PIN_B8
+- IN4-> GPIOB -> PIN_B9
 
 ### Ultrasonic Module
 #### Ultrasonic 1
-- TRIG->GPIOA->PIN4
-- ECHO->GPIOA->PIN5
+- TRIG->GPIOA->PIN_A0
+- ECHO->GPIOA->PIN_A4
 #### Ultrasonic 2
-- TRIG->GPIOA->PIN6
-- ECHO->GPIOA->PIN7
+- TRIG->GPIOB->PIN_B0
+- ECHO->GPIOB->PIN_B1
 #### Ultrasonic 3
-- TRIG->GPIOA->PIN10
-- ECHO->GPIOA->PIN11
+- TRIG->GPIOB->PIN_B13
+- ECHO->GPIOB->PIN_B14
 #### Ultrasonic 4
-- TRIG->GPIOA->PIN12
-- ECHO->GPIOA->PIN13
+- TRIG->GPIOA->PIN_A15
+- ECHO->GPIOB->PIN_B15
 
 ### Bluetooth Module
 - UART_Rx -> PIN_A9 or PIN_B6
