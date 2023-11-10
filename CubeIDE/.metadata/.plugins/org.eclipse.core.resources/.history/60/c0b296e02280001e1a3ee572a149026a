@@ -3,17 +3,16 @@
  *
  *  Created on: Nov 1, 2023
  *      Author: Ahmed
- *
- *      RX "Car2"
- *
- *      Tested in 11-11-2023
- *      Version 1
+ *      Tx
  */
 
 
 #include "HAL/HAL_NRF.h"
 
+uint8_t Counter = 0 ;
+uint8_t Send_Data[10] ;
 
+extern UART_HandleTypeDef huart1;
 
 void NRF_ChipSelect (void)
 {
@@ -95,70 +94,14 @@ void NRF_voidWriteMultiByteReg(uint8_t Copy_u8Reg , uint8_t *Data , uint8_t Copy
 	NRF_ChipSelect() ;
 
 	/* Send Data */
-	HAL_SPI_Transmit(NRF_SPI1, Local_Buffer, 1    , 1000) ;
-	HAL_SPI_Transmit(NRF_SPI1, Data  , Copy_u8Size , 1000) ;
+	HAL_SPI_Transmit(NRF_SPI1,Local_Buffer,1,100) ;
+	HAL_SPI_Transmit(NRF_SPI1,Data,Copy_u8Size,1000) ;
 
-	/* Release"Unselect"  device */
+	/* Release"Unselect"device */
 	NRF_ChipUnSelect () ;
 }
 
 
-
-/**
- * Brief : Read a Byte from Register.
- *
- * Parameters : Register want to Read from --> Copy_u8Reg
- *
- * Synchronous
- * Non reentrant
- * Return : Register Value
- * note :
- *
- */
-uint8_t NRF_u8ReadByteReg(uint8_t Copy_u8Reg)
-{
-
-	uint8_t Local_Data=0;
-
-	/* Chip Select */
-	NRF_ChipSelect() ;
-
-	/* Receive Data */
-	HAL_SPI_Transmit(NRF_SPI1,  &Copy_u8Reg , 1 ,100 ) ;
-	HAL_SPI_Receive(NRF_SPI1 , &Local_Data, 1 ,100) ;
-
-	/* Release"Unselect"  device */
-	NRF_ChipUnSelect () ;
-
-	return Local_Data ;
-}
-
-/**
- * Brief : Read Data Multi-Byte From Certain Register .
- *
- * Parameters : Register want to Read from --> Copy_u8Reg
- *				Data of Register 		   --> Data
- *				Size of Data want to read  --> Copy_u8Size
- * Synchronous
- * Non reentrant
- * Return : none
- * note :
- *
- */
-void NRF_voidReadMultiByteReg(uint8_t Copy_u8Reg , uint8_t *Data , uint32_t Copy_u8Size)
-{
-
-	/* Chip Select */
-	NRF_ChipSelect() ;
-
-	/* Receive Data */
-	HAL_SPI_Transmit(NRF_SPI1,&Copy_u8Reg ,1,100 ) ;
-	HAL_SPI_Receive(NRF_SPI1 , Data ,Copy_u8Size ,1000) ;
-
-	/* Release"Unselect"  device */
-	NRF_ChipUnSelect () ;
-
-}
 
 
 /**
@@ -180,7 +123,7 @@ void NRF_voidCommandSet (uint8_t Copy_u8Command )
 	/* Send Data */
 	HAL_SPI_Transmit(NRF_SPI1, &Copy_u8Command, 1 ,100) ;
 
-	/* Release"Unselect"  device */
+	/* Release"Unselect" device */
 	NRF_ChipUnSelect () ;
 }
 
@@ -201,10 +144,10 @@ void NRF_voidInit ()
 {
 	/* Disable Chip */
 	NRF_ChipDisable () ;
-	NRF_ChipUnSelect() ;
+
 
 	/* Reset All Registers */
-	NRF_voidResetNRF(0X00) ;
+	//NRF_voidResetNRF(0X00) ;
 
 	/* Config Init */
 	NRF_voidWriteByteReg(CONFIG,0x00) ;
@@ -229,7 +172,7 @@ void NRF_voidInit ()
 
 	/* Enable Chip */
 	NRF_ChipEnable () ;
-	NRF_ChipSelect() ;
+
 
 }
 
@@ -250,7 +193,6 @@ void NRF_voidTransmitterMode (uint8_t * Address ,uint8_t Copy_u8Channel_Number )
 {
 	/* Disable Chip */
 	NRF_ChipDisable () ;
-	NRF_ChipUnSelect() ;
 
 	/* Select Channel */
 	NRF_voidWriteByteReg(RF_CH,Copy_u8Channel_Number) ;
@@ -261,12 +203,14 @@ void NRF_voidTransmitterMode (uint8_t * Address ,uint8_t Copy_u8Channel_Number )
 	/* Power up Device and select the device as TX */
 	uint8_t Temp ;
 	Temp = NRF_u8ReadByteReg(CONFIG);
-	Temp = Temp | (1<<1);
-	NRF_voidWriteByteReg(CONFIG,Temp) ;
+	Temp = Temp | (1<<1) | (0<<0) ;   // 0b0000 0010
+	NRF_voidWriteByteReg(CONFIG,0x02) ;
+	HAL_Delay(100) ;
 
 	/* Enable Chip */
 	NRF_ChipEnable () ;
-	NRF_ChipSelect() ;
+
+
 }
 
 
@@ -275,7 +219,8 @@ void NRF_voidTransmitterMode (uint8_t * Address ,uint8_t Copy_u8Channel_Number )
  * Brief :  Transmit Data  .
  *
  * Parameters : Address of Data to be Transmitted  --> Data
- *
+ * 				Data To be Transmitted In Bytes    --> NRF_NUMBERS_EXIST
+ * 				Indication if data Contain Numbers or Not --> Copy_u8CharFlag
  *
  * Synchronous
  * Non reentrant
@@ -283,56 +228,86 @@ void NRF_voidTransmitterMode (uint8_t * Address ,uint8_t Copy_u8Channel_Number )
  * note :
  *
  */
-void NRF_voidSendData (uint8_t * Data )
+
+void NRF_voidSendData (uint8_t * Data , uint8_t Copy_u8SizeinByte ,uint8_t Copy_u8CharFlag  )
 {
+	/* Counter of For Loop */
+	uint8_t Local_Counter = 0 ;
+	/* Array Index */
+	uint8_t Local_ArrayIndex = 0 ;
+
 	/* Chip Select  */
 	NRF_ChipSelect() ;
-
-	/* Chip Enable  */
-    NRF_ChipEnable () ;
 
    uint8_t Temp = W_TX_PAYLOAD ;
 
    /* Get the Receiver ready , Next Pay-Load is Data */
    HAL_SPI_Transmit(NRF_SPI1, &Temp, 1 , 100) ;
 
+   /* Always First Byte is Character */
+   Send_Data[0] = Data[0] ;
+   Local_ArrayIndex ++ ;
+
+   if (Copy_u8CharFlag == NRF_NUMBERS_EXIST )
+   {
+	   /* Number(s) */
+	   for (Local_Counter = 1 ; Local_Counter < Copy_u8SizeinByte ; Local_Counter++ )
+	   {
+		   Local_ArrayIndex= HAL_NRF_Send_Number(Data[Local_Counter] ,Local_Counter ) ;
+	   }
+
+   }
+
+   /* Last Element is + */
+   Send_Data[Local_ArrayIndex] = '+' ;
+
    /* Send Pay-Load "Data" */
-   HAL_SPI_Transmit(NRF_SPI1, Data, 32 , 1000) ;
+   HAL_SPI_Transmit(NRF_SPI1, Send_Data, (Local_ArrayIndex+1) , 10000) ;
 
 	/* Chip UnSelect  */
 	NRF_ChipUnSelect() ;
 
 	/* Delay */
-	HAL_Delay(5) ;
+	HAL_Delay(1) ;
 
 	/* Check if TX Buffer is empty or not */
 	uint8_t Local_FIFOStatus ;
 	Local_FIFOStatus = NRF_u8ReadByteReg(FIFO_STATUS) ;
 
+
+
 	// 4 --> TX_EMPTY(1)
-	if ( (Local_FIFOStatus & (1<<4)) )
+	if ((Local_FIFOStatus & (1<<4)))
 	{
 		/* Put Any-Condition To Check */
 
+		Temp = FLUSH_TX ;
 		/* Flush TX */
-		NRF_voidCommandSet(FLUSH_TX);
-
-		/* For Debug */
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12,GPIO_PIN_SET) ;
+		NRF_voidCommandSet(Temp);
 
 		// Reset FIFO_STATUS
 		NRF_voidResetNRF(FIFO_STATUS) ;
+
+		/* For Debug */
+		HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_12) ;
+		HAL_Delay(1000) ;
+
 	}
 
+		/* Reinitialize the array with Zeros */
+	   for (Local_Counter = 0 ; Local_Counter<10 ; Local_Counter++ )
+	   {
+		   Send_Data[Local_Counter] = 0 ;
+	   }
+
+
+
 }
 
-
 /**
- * Brief :  Receive Data from NRF  .
+ * Brief :  Send Number through NRF .
  *
- * Parameters : Address of Data to be Received  --> Address
- *				Channel Number to Receive from 	--> Copy_u8Channel_Number
- *
+ * Parameters : Number that you want to send --> Copy_u32Number
  * Synchronous
  * Non reentrant
  * Return : NONE
@@ -340,110 +315,36 @@ void NRF_voidSendData (uint8_t * Data )
  *
  */
 
-void NRF_voidReceiverMode (uint8_t * Address ,uint8_t Copy_u8Channel_Number )
+uint8_t HAL_NRF_Send_Number(uint32_t Copy_u32Number , uint8_t Copy_u8Number_Index)
 {
 
-	/* Disable Chip */
-	NRF_ChipDisable () ;
+	uint8_t Local_u8Number_Element = 0  ;
+	uint8_t Main_Arr[5] = {0}			;
 
-	/* Select Channel */
-	NRF_voidWriteByteReg(RF_CH,Copy_u8Channel_Number) ;
-
-	/* Activate PIPE1 To receive */
-	uint8_t Local_Temp =  NRF_u8ReadByteReg (EN_RXADDR) ;
-	Local_Temp |= (1<<1) ; // In Case there is channels already Activated not to change it
-	NRF_voidWriteByteReg(EN_RXADDR,Local_Temp) ;
-
-	/* PIPE1 Address Width  */
-	NRF_voidWriteMultiByteReg(RX_ADDR_P1,Address,5) ;
-
-	/* Data received is 32 Byte "For PIPE1" */
-	NRF_voidWriteByteReg(RX_PW_P1,32) ;
-
-	/* Power up Device and select the device as RX */
-	uint8_t Temp ;
-	Temp = NRF_u8ReadByteReg(CONFIG);
-	Temp = Temp | (1<<1) | (1<<0) ;
-	NRF_voidWriteByteReg(CONFIG,Temp) ;
-
-	/* Enable Chip */
-	NRF_ChipEnable () ;
-
-}
-
-/**
- * Brief :  Check the state of Certain PIPE   .
- *
- * Parameters : PIPE Number want to Check   --> Copy_u8PipeNum
- *
- *
- * Synchronous
- * Non reentrant
- * Return : NONE
- * note :
- *
- */
-
-uint8_t NRF_u8IsDataAvailable (uint8_t Copy_u8PipeNum)
-{
-	uint8_t Local_Temp = 0 ;
-	uint8_t Return_Value ;
-	Local_Temp = NRF_u8ReadByteReg(STATUS) ;
-
-	/* Check if Certain PIPE is Empty or Not + Data Ready or Not  */
-	if (((Local_Temp)&(1<<6)) && ((Local_Temp)&(Copy_u8PipeNum<<1)) )
+	if (Copy_u32Number == 0)
 	{
-		/* To Clear Data Ready Bit */
-		NRF_voidWriteByteReg(STATUS,1<<6) ;
-
-		Return_Value = 1 ;
+		Local_u8Number_Element++ ;
+	}
+	else
+	{
+    /* Splitting Number */
+    while (Copy_u32Number > 0)
+    {
+    	Main_Arr[Local_u8Number_Element] = (Copy_u32Number % 10) + 48 ;
+    	Copy_u32Number = Copy_u32Number / 10 ;
+    	Local_u8Number_Element++ ;
+    }
 
 	}
-	else Return_Value = 0 ;
+    /* Copy the elements of Main_Arr --> Reverted_Arr then send them to UART in correct order */
 
-	return Return_Value ;
+    for (uint8_t Revert_Index = 0 ; Revert_Index<Local_u8Number_Element ; Revert_Index++)
+    {
+    	Send_Data[Copy_u8Number_Index] = Main_Arr[Local_u8Number_Element-Revert_Index-1] ;
+    	Copy_u8Number_Index ++ ;
+    }
 
-}
-
-
-/**
- * Brief :  Receive Data From NRF.
- *
- * Parameters : Address to Receive Data in it    --> Data
- *
- *
- * Synchronous
- * Non reentrant
- * Return : NONE
- * note :
- *
- */
-void NRF_voidReceiveData (uint8_t * Data )
-{
-	/* Chip Select  */
-	NRF_ChipSelect() ;
-
-	/* Chip Enable  */
-    NRF_ChipEnable () ;
-
-   uint8_t Local_Temp = R_RX_PAYLOAD ;
-
-   /* Get the Receiver ready To Read From it  */
-   HAL_SPI_Transmit(NRF_SPI1, &Local_Temp, 1 , 100) ;
-
-   /* Receive Pay-Load "Data" */
-   HAL_SPI_Receive(NRF_SPI1, Data, 32 , 1000) ;
-
-	/* Chip UnSelect  */
-	NRF_ChipUnSelect() ;
-
-	/* Delay */
-	HAL_Delay(5) ;
-
-	/* Flush RX FIFO */
-	Local_Temp = FLUSH_RX ;
-	NRF_voidCommandSet(Local_Temp) ;
-
+    return Copy_u8Number_Index ;
 
 }
 
@@ -504,3 +405,6 @@ void NRF_voidResetNRF(uint8_t Copy_u8REG)
 	NRF_voidWriteByteReg(FEATURE, 0);
 	}
 }
+
+
+

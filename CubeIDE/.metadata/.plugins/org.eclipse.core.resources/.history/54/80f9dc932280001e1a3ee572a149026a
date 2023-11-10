@@ -129,7 +129,7 @@ int main(void)
   Data_Tx.Speed 	 = 125 						;  /* Input from MOTION Branch     */
   Data_Tx.Direction  = FORWARD 					;  /* Input from MOTION Branch     */
   Data_Tx.Distance 	 = 177 						;  /* Input from ULTRASONIC Branch */
-  Data_Tx.Indication = INDICATION_SUDDEN_BREAK 	;  /* Input from Emergency		   */
+  Data_Tx.Indication = INDICATION_SUDDEN_BREAK 	;
 
   /* USER CODE END 2 */
 
@@ -160,6 +160,14 @@ int main(void)
 	  Data_Sent[0] = Data_States[3]      ;
 	  Data_Sent[1] = Data_Tx.Indication  ;
 	  NRF_voidSendData((Data_Sent),2,NRF_NUMBERS_EXIST)   ;
+
+
+
+
+
+
+	  /**********************************************/
+
 
 
 
