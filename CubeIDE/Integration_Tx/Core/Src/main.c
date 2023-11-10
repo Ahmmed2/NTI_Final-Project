@@ -67,10 +67,9 @@ static void MX_GPIO_Init(void);
 static void MX_TIM1_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_TIM3_Init(void);
+/* USER CODE BEGIN PFP */
 void APP_voidAction (uint8_t Copy_u8Action , uint8_t Copy_u8Direction) ;
 void APP_voidTakeDecision (uint8_t Copy_u8rxData) ;
-/* USER CODE BEGIN PFP */
-
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -109,11 +108,11 @@ int main(void)
   MX_TIM1_Init();
   MX_USART1_UART_Init();
   MX_TIM3_Init();
+
   /* USER CODE BEGIN 2 */
 
   HAL_UART_Receive_IT(&huart1,&rxData,1); // Enabling interrupt receive
   HAL_TIM_OC_MspInit(&htim3) ;
-
 
   /* USER CODE END 2 */
 
@@ -372,7 +371,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
   * @brief
   * 	   Receive Commands from BM and Start to Move in certain Direction
   * 	   Depend on the Value of rxData
-  * 	   Any Action will be executed  for 2 Seconds only  .
+  * 	   Any Action will be executed for 2 Seconds only  .
   *
   * @param Data from BM -->Copy_u8rxData
   * @retval None
@@ -410,6 +409,10 @@ void APP_voidTakeDecision (uint8_t Copy_u8rxData)
 		HAL_voidControlMotors(SPEED_0,STOP) ;
 		Car_State = STATE_STOP ;
     	break ;
+
+	case 'S' :
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
+		break ;
 
 	}
 
