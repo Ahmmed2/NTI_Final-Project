@@ -18,11 +18,11 @@ MOSI ->		PA7
 
 ### Motion 
 - Motor->1 pins En1->(Timer1_CH1)->GPIOA -> PIN8
-- IN1-> GPIOA -> PIN0
-- IN2-> GPIOA -> PIN1
-- Motor->2 pins En2->(Timer1_CH2)->GPIOA -> PIN9
-- IN3-> GPIOA -> PIN2
-- IN4-> GPIOA -> PIN3
+- IN1-> GPIOA -> PIN11
+- IN2-> GPIOA -> PIN12
+- Motor->2 pins En2->GPIOB -> PIN12
+- IN3-> GPIOB -> PIN8
+- IN4-> GPIOB -> PIN9
 
 ### Ultrasonic Module
 #### Ultrasonic 1
