@@ -6,11 +6,11 @@
 
 ### NRF Pins 
 
-CE	 ->		PA1
-SCK	 ->		PA5
-MISO ->		PA6
-CSN	 ->		PA2
-MOSI ->		PA7
+CE	 ->		PA1  
+SCK	 ->		PA5  
+MISO ->		PA6  
+CSN	 ->		PA2  
+MOSI ->		PA7  
 
 ### GSM module 
 - PinB10 -> UART3 TX
