@@ -87,11 +87,15 @@
 ///////////////////////////////////
 
 /* Indication */
-#define SUDDEN_BREAK			1
-#define	TRAFFIC					2
-#define	OBSTACLE				3
+#define INDICATION_SUDDEN_BREAK				1
+#define	INDICATION_TRAFFIC					2
+#define	INDICATION_OBSTACLE					3
 ///////////////////////////////////
 
+/* Numbers Indication */
+
+#define NRF_NUMBERS_EXIST		0
+#define NRF_NUMBERS_NOT_EXIST	1
 
 /***************Macros Definitions END   *****************/
 
@@ -121,35 +125,35 @@ typedef struct
 
 /***************Software Interfaces Definitions Start *****************/
 
-void NRF_ChipSelect (void) 									  						;
-void NRF_ChipUnSelect (void) 								  						;
-void NRF_ChipEnable (void) 									  						;
-void NRF_ChipDisable (void)									  						;
+void NRF_ChipSelect (void) 									  							;
+void NRF_ChipUnSelect (void) 								  							;
+void NRF_ChipEnable (void) 									  							;
+void NRF_ChipDisable (void)									  							;
 
 /* Write (Multi) Byte  */
-void NRF_voidWriteByteReg(uint8_t Reg , uint8_t Data)								;
-void NRF_voidWriteMultiByteReg(uint8_t Reg , uint8_t *Data , uint8_t Size)  		;
+void NRF_voidWriteByteReg(uint8_t Reg , uint8_t Data)									;
+void NRF_voidWriteMultiByteReg(uint8_t Reg , uint8_t *Data , uint8_t Size)  			;
 
 /* Read (Multi) Byte  */
-uint8_t NRF_u8ReadByteReg(uint8_t Reg )												;
-void NRF_voidReadMultiByteReg(uint8_t Reg , uint8_t *Data , uint32_t Size)			;
+uint8_t NRF_u8ReadByteReg(uint8_t Reg )													;
+void NRF_voidReadMultiByteReg(uint8_t Reg , uint8_t *Data , uint32_t Size)				;
 
 /* System Configuration */
-void NRF_voidCommandSet (uint8_t Copy_u8Command )									;
-void NRF_voidInit(void) 															;
+void NRF_voidCommandSet (uint8_t Copy_u8Command )										;
+void NRF_voidInit(void) 																;
 
 /* Transmit Data */
-void NRF_voidTransmitterMode (uint8_t * Address ,uint8_t Copy_u8Channel_Number ) 	;
-void NRF_voidSendData (uint8_t * Data , uint8_t Copy_u8SizeinByte )					;
-uint8_t HAL_NRF_Send_Number(uint32_t Copy_u32Number , uint8_t Copy_u8Number_Index)  ;
+void NRF_voidTransmitterMode (uint8_t * Address ,uint8_t Copy_u8Channel_Number ) 		;
+void NRF_voidSendData (uint8_t *Data,uint8_t Copy_u8SizeinByte,uint8_t Copy_u8CharFlag)	;
+uint8_t HAL_NRF_Send_Number(uint32_t Copy_u32Number , uint8_t Copy_u8Number_Index)  	;
 
 /* Receive Data */
-void NRF_voidReceiverMode (uint8_t * Address ,uint8_t Copy_u8Channel_Number )		;
-uint8_t NRF_u8IsDataAvailable (uint8_t Copy_u8PipeNum)								;
-void NRF_voidReceiveData (uint8_t * Data )											;
+void NRF_voidReceiverMode (uint8_t * Address ,uint8_t Copy_u8Channel_Number )			;
+uint8_t NRF_u8IsDataAvailable (uint8_t Copy_u8PipeNum)									;
+void NRF_voidReceiveData (uint8_t * Data )												;
 
 /* Reset NRF */
-void NRF_voidResetNRF(uint8_t Copy_u8REG)											;
+void NRF_voidResetNRF(uint8_t Copy_u8REG)												;
 
 
 /***************Software Interfaces Definitions END   *****************/

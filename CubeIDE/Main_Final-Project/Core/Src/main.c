@@ -126,10 +126,10 @@ int main(void)
   /* USER CODE BEGIN 2 */
   DataTransfer_t Data_Tx ;
 
-  Data_Tx.Speed 	 = 25 			;  /* Input from MOTION Branch     */
-  Data_Tx.Direction  = FORWARD 		;  /* Input from MOTION Branch     */
-  Data_Tx.Distance 	 = 55 			;  /* Input from ULTRASONIC Branch */
-  Data_Tx.Indication = SUDDEN_BREAK ;
+  Data_Tx.Speed 	 = 25 						;  /* Input from MOTION Branch     */
+  Data_Tx.Direction  = FORWARD 					;  /* Input from MOTION Branch     */
+  Data_Tx.Distance 	 = 55 						;  /* Input from ULTRASONIC Branch */
+  Data_Tx.Indication = INDICATION_SUDDEN_BREAK 	;
 
   /* USER CODE END 2 */
 
@@ -144,22 +144,22 @@ int main(void)
 	  /* Speed Data */
 	  Data_Sent[0] = Data_States[0] ;
 	  Data_Sent[1] = Data_Tx.Speed  ;
-	  NRF_voidSendData(Data_Sent,2) ;
+	  NRF_voidSendData(Data_Sent,2,NRF_NUMBERS_EXIST) ;
 
 	  /* Direction Data */
 	  Data_Sent[0] = Data_States[1]     ;
 	  Data_Sent[1] = Data_Tx.Direction  ;
-	  NRF_voidSendData((Data_Sent),2)   ;
+	  NRF_voidSendData((Data_Sent),2,NRF_NUMBERS_EXIST)   ;
 
 	  /* Distance Data */
 	  Data_Sent[0] = Data_States[2]     ;
 	  Data_Sent[1] = Data_Tx.Distance  ;
-	  NRF_voidSendData((Data_Sent),2)   ;
+	  NRF_voidSendData((Data_Sent),2,NRF_NUMBERS_EXIST)   ;
 
 	  /* Indication Data */
 	  Data_Sent[0] = Data_States[3]      ;
 	  Data_Sent[1] = Data_Tx.Indication  ;
-	  NRF_voidSendData((Data_Sent),2)   ;
+	  NRF_voidSendData((Data_Sent),2,NRF_NUMBERS_EXIST)   ;
 
 
 

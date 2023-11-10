@@ -1,22 +1,12 @@
-23:00:53 **** Incremental Build of configuration Debug for project Main_Final-Project ****
+01:26:57 **** Incremental Build of configuration Debug for project Main_Final-Project ****
 make -j12 all 
-arm-none-eabi-gcc "../Core/Src/HAL/HAL_NRF.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/HAL/HAL_NRF.d" -MT"Core/Src/HAL/HAL_NRF.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/HAL/HAL_NRF.o"
-arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
-arm-none-eabi-gcc "../Core/Src/stm32f1xx_hal_msp.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32f1xx_hal_msp.d" -MT"Core/Src/stm32f1xx_hal_msp.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/stm32f1xx_hal_msp.o"
-arm-none-eabi-gcc "../Core/Src/stm32f1xx_it.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32f1xx_it.d" -MT"Core/Src/stm32f1xx_it.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/stm32f1xx_it.o"
-arm-none-eabi-gcc -o "Main_Final-Project.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\Courses\NTI\NTI_Final-Project\NTI_Final-Project\CubeIDE\Main_Final-Project\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Main_Final-Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
-Finished building target: Main_Final-Project.elf
- 
 arm-none-eabi-size   Main_Final-Project.elf 
-arm-none-eabi-objdump -h -S  Main_Final-Project.elf  > "Main_Final-Project.list"
-Finished building: Main_Final-Project.list
- 
    text	   data	    bss	    dec	    hex	filename
-  10072	     36	   1756	  11864	   2e58	Main_Final-Project.elf
+  10068	     36	   1756	  11860	   2e54	Main_Final-Project.elf
 Finished building: default.size.stdout
  
 arm-none-eabi-objcopy -O ihex Main_Final-Project.elf Main_Final-Project.hex
  
 
-23:00:55 Build Finished. 0 errors, 0 warnings. (took 2s.284ms)
+01:26:58 Build Finished. 0 errors, 0 warnings. (took 969ms)
 

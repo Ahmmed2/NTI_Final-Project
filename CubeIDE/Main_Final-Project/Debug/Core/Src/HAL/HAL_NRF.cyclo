@@ -9,9 +9,9 @@
 ../Core/Src/HAL/HAL_NRF.c:179:6:NRF_voidCommandSet	1
 ../Core/Src/HAL/HAL_NRF.c:204:6:NRF_voidInit	1
 ../Core/Src/HAL/HAL_NRF.c:253:6:NRF_voidTransmitterMode	1
-../Core/Src/HAL/HAL_NRF.c:291:6:NRF_voidSendData	5
-../Core/Src/HAL/HAL_NRF.c:380:9:HAL_NRF_Send_Number	4
-../Core/Src/HAL/HAL_NRF.c:426:6:NRF_voidReceiverMode	1
-../Core/Src/HAL/HAL_NRF.c:474:9:NRF_u8IsDataAvailable	3
-../Core/Src/HAL/HAL_NRF.c:508:6:NRF_voidReceiveData	1
-../Core/Src/HAL/HAL_NRF.c:546:6:NRF_voidResetNRF	3
+../Core/Src/HAL/HAL_NRF.c:293:6:NRF_voidSendData	5
+../Core/Src/HAL/HAL_NRF.c:379:9:HAL_NRF_Send_Number	4
+../Core/Src/HAL/HAL_NRF.c:425:6:NRF_voidReceiverMode	1
+../Core/Src/HAL/HAL_NRF.c:473:9:NRF_u8IsDataAvailable	3
+../Core/Src/HAL/HAL_NRF.c:507:6:NRF_voidReceiveData	1
+../Core/Src/HAL/HAL_NRF.c:545:6:NRF_voidResetNRF	3

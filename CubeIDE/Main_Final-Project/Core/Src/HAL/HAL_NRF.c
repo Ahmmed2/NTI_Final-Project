@@ -280,7 +280,8 @@ void NRF_voidTransmitterMode (uint8_t * Address ,uint8_t Copy_u8Channel_Number )
  * Brief :  Transmit Data  .
  *
  * Parameters : Address of Data to be Transmitted  --> Data
- *
+ * 				Data To be Transmitted In Bytes    --> NRF_NUMBERS_EXIST
+ * 				Indication if data Contain Numbers or Not --> Copy_u8CharFlag
  *
  * Synchronous
  * Non reentrant
@@ -289,7 +290,7 @@ void NRF_voidTransmitterMode (uint8_t * Address ,uint8_t Copy_u8Channel_Number )
  *
  */
 
-void NRF_voidSendData (uint8_t * Data , uint8_t Copy_u8SizeinByte  )
+void NRF_voidSendData (uint8_t * Data , uint8_t Copy_u8SizeinByte ,uint8_t Copy_u8CharFlag  )
 {
 	/* Counter of For Loop */
 	uint8_t Local_Counter = 0 ;
@@ -304,21 +305,18 @@ void NRF_voidSendData (uint8_t * Data , uint8_t Copy_u8SizeinByte  )
    /* Get the Receiver ready , Next Pay-Load is Data */
    HAL_SPI_Transmit(NRF_SPI1, &Temp, 1 , 100) ;
 
-   for (Local_Counter = 0 ; Local_Counter<Copy_u8SizeinByte ; Local_Counter++ )
-   {
-	   /* Number */
-	   if ( ((Data[Local_Counter] +36) < 100))
-	   {
-		   /* Number is to be sent */
-		   Local_ArrayIndex = HAL_NRF_Send_Number( Data[Local_Counter] , Local_Counter) ;
+   /* Always First Byte is Character */
+   Send_Data[0] = Data[0] ;
+   Local_ArrayIndex ++ ;
 
-	   }
-	   /* Character */
-	   else
+   if (Copy_u8CharFlag == NRF_NUMBERS_EXIST )
+   {
+	   /* Number(s) */
+	   for (Local_Counter = 1 ; Local_Counter < Copy_u8SizeinByte ; Local_Counter++ )
 	   {
-		   Send_Data[Local_ArrayIndex] = Data[Local_Counter]  ;
-		   Local_ArrayIndex ++ ;
+		   Local_ArrayIndex= HAL_NRF_Send_Number(Data[Local_Counter] ,Local_Counter ) ;
 	   }
+
    }
 
    /* Last Element is + */
@@ -326,7 +324,6 @@ void NRF_voidSendData (uint8_t * Data , uint8_t Copy_u8SizeinByte  )
 
    /* Send Pay-Load "Data" */
    HAL_SPI_Transmit(NRF_SPI1, Send_Data, (Local_ArrayIndex+1) , 10000) ;
-
 
 	/* Chip UnSelect  */
 	NRF_ChipUnSelect() ;
