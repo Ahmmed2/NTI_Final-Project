@@ -59,13 +59,21 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define NRF_CE_Pin GPIO_PIN_1
+#define NRF_CE_GPIO_Port GPIOA
+#define NRF_CSN_Pin GPIO_PIN_2
+#define NRF_CSN_GPIO_Port GPIOA
 #define BM_TX_Pin GPIO_PIN_6
 #define BM_TX_GPIO_Port GPIOB
 #define BM_RX_Pin GPIO_PIN_7
 #define BM_RX_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
-
+#define Stationary_Mode		0
+#define Normal_Mode			1
+#define Comm_Mode			2
+#define Dominant_Mode		3
+#define Emergency_Mode		4
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

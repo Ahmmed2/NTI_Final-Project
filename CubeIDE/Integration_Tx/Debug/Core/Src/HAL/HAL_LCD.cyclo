@@ -1,0 +1,11 @@
+../Core/Src/HAL/HAL_LCD.c:16:6:LCD_voidInit	1
+../Core/Src/HAL/HAL_LCD.c:83:6:LCD_voidEnable_4L	1
+../Core/Src/HAL/HAL_LCD.c:93:6:LCD_voidWriteCommand_4L	1
+../Core/Src/HAL/HAL_LCD.c:115:6:LCD_voidWrite_Data_4L	2
+../Core/Src/HAL/HAL_LCD.c:141:7:LCD_voidSendDATA_4L	1
+../Core/Src/HAL/HAL_LCD.c:156:6:LCD_GoToXY	5
+../Core/Src/HAL/HAL_LCD.c:231:6:LCD_voidWriteSting	2
+../Core/Src/HAL/HAL_LCD.c:259:6:LCD_voidDisplayNumber	4
+../Core/Src/HAL/HAL_LCD.c:321:6:LCD_voidWriteSpecialCharacter	2
+../Core/Src/HAL/HAL_LCD.c:369:6:LCD_voidShift	5
+../Core/Src/HAL/HAL_LCD.c:396:6:LCD_voidClear	1
