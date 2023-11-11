@@ -18,10 +18,10 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "GSM.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "GSM.h"
 
 /* USER CODE END Includes */
 
@@ -42,7 +42,7 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-UART_HandleTypeDef GSM_UART;
+UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN PV */
 
@@ -107,8 +107,8 @@ int main(void)
 
   //GSM_VidInit();
   //HAL_Delay(1000);
-  GSM_VidSendSMS((uint8_t*)"+201066221761",(uint8_t*) "Hello");
-  HAL_Delay(1000);
+  //GSM_VidSendSMS((uint8_t*)"+201066221761",(uint8_t*) "Hello");
+  HAL_Delay(10000);
 
   /* USER CODE END 2 */
 
@@ -117,7 +117,8 @@ int main(void)
   while (1)
   {
 
-
+	  GSM_VidSendSMS("01099561728", "B7bk");
+	  HAL_Delay(10000);
 	  /*
 	    HAL_UART_Transmit(&GSM_UART, Loc_u8Cmd1, 2, 100);
 	  	HAL_UART_Transmit(&GSM_UART, (uint8_t*)"\n\r", 2 , 100);
@@ -154,9 +155,8 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
-  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
@@ -167,7 +167,7 @@ void SystemClock_Config(void)
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSE;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
@@ -193,15 +193,15 @@ static void MX_USART3_UART_Init(void)
   /* USER CODE BEGIN USART3_Init 1 */
 
   /* USER CODE END USART3_Init 1 */
-  GSM_UART.Instance = USART3;
-  GSM_UART.Init.BaudRate = 9600;
-  GSM_UART.Init.WordLength = UART_WORDLENGTH_8B;
-  GSM_UART.Init.StopBits = UART_STOPBITS_1;
-  GSM_UART.Init.Parity = UART_PARITY_NONE;
-  GSM_UART.Init.Mode = UART_MODE_TX_RX;
-  GSM_UART.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  GSM_UART.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&GSM_UART) != HAL_OK)
+  huart3.Instance = USART3;
+  huart3.Init.BaudRate = 9600;
+  huart3.Init.WordLength = UART_WORDLENGTH_8B;
+  huart3.Init.StopBits = UART_STOPBITS_1;
+  huart3.Init.Parity = UART_PARITY_NONE;
+  huart3.Init.Mode = UART_MODE_TX_RX;
+  huart3.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart3.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart3) != HAL_OK)
   {
     Error_Handler();
   }
@@ -222,7 +222,6 @@ static void MX_GPIO_Init(void)
 /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
