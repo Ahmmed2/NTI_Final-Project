@@ -24,6 +24,7 @@
 #include "HAL/dc_motor.h"
 #include "HAL/Ultrasonic.h"
 #include "HAL/HAL_NRF.h"
+#include "HAL/GSM.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -49,6 +50,7 @@ TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 
 UART_HandleTypeDef huart1;
+UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN PV */
 
@@ -94,6 +96,7 @@ static void MX_USART1_UART_Init(void);
 static void MX_TIM3_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_TIM2_Init(void);
+static void MX_USART3_UART_Init(void);
 /* USER CODE BEGIN PFP */
 void APP_voidTakeDecision (uint8_t Copy_u8rxData);
 void APP_voidModeUpdate() ;
@@ -137,10 +140,13 @@ int main(void)
   MX_TIM3_Init();
   MX_SPI1_Init();
   MX_TIM2_Init();
+  MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
   HAL_voidUltraSonicInit() ;
   HAL_UART_Receive_IT(&huart1,&rxData,1); // Enabling interrupt receive
   NRF_voidInit();
+  GSM_VidInit();
+  GSM_VidCheckConnection();
   NRF_voidTransmitterMode (TxAddress ,10 );
 
   Data_Tx.Speed 	 = 0 						;  /* Input from MOTION Branch     */
@@ -428,6 +434,39 @@ static void MX_USART1_UART_Init(void)
 }
 
 /**
+  * @brief USART3 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USART3_UART_Init(void)
+{
+
+  /* USER CODE BEGIN USART3_Init 0 */
+
+  /* USER CODE END USART3_Init 0 */
+
+  /* USER CODE BEGIN USART3_Init 1 */
+
+  /* USER CODE END USART3_Init 1 */
+  huart3.Instance = USART3;
+  huart3.Init.BaudRate = 9600;
+  huart3.Init.WordLength = UART_WORDLENGTH_8B;
+  huart3.Init.StopBits = UART_STOPBITS_1;
+  huart3.Init.Parity = UART_PARITY_NONE;
+  huart3.Init.Mode = UART_MODE_TX_RX;
+  huart3.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart3.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USART3_Init 2 */
+
+  /* USER CODE END USART3_Init 2 */
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -471,8 +510,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PA4 */
-  GPIO_InitStruct.Pin = GPIO_PIN_4;
+  /*Configure GPIO pins : Emergency_button_Pin PA4 */
+  GPIO_InitStruct.Pin = Emergency_button_Pin|GPIO_PIN_4;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
@@ -565,9 +604,13 @@ void APP_voidTakeDecision (uint8_t Copy_u8rxData)
 
 	HAL_UART_Receive_IT(&huart1,&rxData,1); // Enabling interrupt receive again
 	APP_voidModeUpdate();
-	if(System_Mode == Comm_Mode || System_Mode == Dominant_Mode || System_Mode == Emergency_Mode)
+	if(System_Mode == Comm_Mode || System_Mode == Dominant_Mode)
 	{
-		NRF_voidSendData (Data_Sent, 8 ,NRF_NUMBERS_EXIST  );
+		NRF_voidSendData (Data_Sent, 8 ,NRF_NUMBERS_EXIST);
+	}
+	if(System_Mode == Emergency_Mode && HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_3))
+	{
+		GSM_VidSendSMS((uint8_t*)"01003676020", (uint8_t*)"Robbery is Happening");
 	}
 }
 
@@ -583,12 +626,17 @@ void APP_voidTakeDecision (uint8_t Copy_u8rxData)
 
 void APP_voidModeUpdate()
 {
-	if(US_ARR[3] < 60 )
+	if(US_ARR[US_BACKWARD] < 60 )
 	{
 		System_Mode = Comm_Mode ;
 	}
 	else
 		System_Mode = Normal_Mode ;
+
+	if(US_ARR[US_FORWARD] < 10 || HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_3))
+	{
+		System_Mode = Emergency_Mode ;
+	}
 }
 
 
@@ -619,21 +667,21 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		Data_Tx.Indication = Normal_Mode 	;
 		HAL_voidControlMotors(Normal_SPEED,Car_Direction) ;
 		Car_Speed = Normal_SPEED ;
-		HAL_UART_Transmit(&huart1,"D",1,100);
+		HAL_UART_Transmit(&huart1,(uint8_t*)"D",1,100);
 	}
 	else if (US_Decision == STOP)
 	{
 		Data_Tx.Indication = INDICATION_SUDDEN_BRAKE 	;
 		HAL_voidControlMotors(SPEED_0,STOP) ;
 		Car_Speed = SPEED_0 ;
-		HAL_UART_Transmit(&huart1,"P",1,100);
+		HAL_UART_Transmit(&huart1,(uint8_t*)"P",1,100);
 	}
 	else if (US_Decision == SPEED_25)
 	{
 		Data_Tx.Indication = INDICATION_OBSTACLE 	;
 		HAL_voidControlMotors(SPEED_25,Car_Direction) ;
 		Car_Speed = SPEED_25 ;
-		HAL_UART_Transmit(&huart1,"S",1,100);
+		HAL_UART_Transmit(&huart1,(uint8_t*)"S",1,100);
 	}
 
       /* Update NRF values*/

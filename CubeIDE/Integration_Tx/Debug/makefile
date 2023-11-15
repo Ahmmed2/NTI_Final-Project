@@ -62,8 +62,8 @@ all:
 main-build: Integration_Tx.elf secondary-outputs
 
 # Tool invocations
-Integration_Tx.elf Integration_Tx.map: $(OBJS) $(USER_OBJS) D:\Courses\NTI\NTI_Final-Project\NTI_Final-Project\CubeIDE\Integration_Tx\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Integration_Tx.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"D:\Courses\NTI\NTI_Final-Project\NTI_Final-Project\CubeIDE\Integration_Tx\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Integration_Tx.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Integration_Tx.elf Integration_Tx.map: $(OBJS) $(USER_OBJS) C:\Users\moham\Desktop\NTI_Internship\Graduation_Project\GraduationProjectCode\NTI_Final-Project\CubeIDE\Integration_Tx\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Integration_Tx.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\moham\Desktop\NTI_Internship\Graduation_Project\GraduationProjectCode\NTI_Final-Project\CubeIDE\Integration_Tx\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Integration_Tx.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
