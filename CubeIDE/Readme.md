@@ -10,7 +10,9 @@
 - SCK	  ->		PA5  
 - MISO  ->		PA6  
 - CSN	  ->		PA2  
-- MOSI  ->		PA7  
+- MOSI  ->		PA7
+- GND   ->    GND
+- VCC   ->    3.3V(Not 5V)
 
 ### GSM module 
 - PinB10 -> UART3 TX
