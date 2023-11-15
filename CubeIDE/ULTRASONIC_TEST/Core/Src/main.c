@@ -98,7 +98,7 @@ int main(void)
     /* FOR TEST */
     Read_DistancesUltrasonics(distances);
 
-    if (distances[2] > 20)
+    if (distances[0] > 20)
     {
       /* LED */
       HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET);
@@ -109,16 +109,7 @@ int main(void)
       HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET);
     }
 
-    if (distances[1] > 30)
-    {
-      /* LED */
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
-    }
-    else
-    {
-      /* LED */
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
-    }
+
   }
   /* USER CODE END 3 */
 }
