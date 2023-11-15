@@ -21,6 +21,9 @@ uint8_t GSM_VidSendSMS(uint8_t *Ptr_u8PhoneNumber, uint8_t *Ptr_u8Message);
 #define GSM_TXTMODECMD_SIZE			11
 #define GSM_SMSOP_SIZE				9
 #define GSM_SMSCL_SIZE				3
-#define GSM_BuffSize				20
+#define GSM_BuffSize				70
+
+#define GSM_TRUE					1
+#define GSM_FALSE					0
 
 #endif /* INC_GSM_H_ */

@@ -21,7 +21,6 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "GSM.h"
 
 /* USER CODE END Includes */
 
@@ -38,7 +37,6 @@
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
 
-
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -53,7 +51,6 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART3_UART_Init(void);
 /* USER CODE BEGIN PFP */
-void HAL_USART3_Send_Number(uint32_t Copy_u32Number);
 
 /* USER CODE END PFP */
 
@@ -69,7 +66,6 @@ void HAL_USART3_Send_Number(uint32_t Copy_u32Number);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
 
   /* USER CODE END 1 */
 
@@ -93,22 +89,6 @@ int main(void)
   MX_GPIO_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
-  /*
-	uint8_t Loc_u8Cmd1[]={"AT"};
-
-	uint8_t Loc_u8Cmd2[]={"AT+CMGF=1"};
-
-	uint8_t Loc_u8Cmd3[]={"AT+CMGS="};
-
-	uint8_t Loc_u8Cmd4[]={"\"+201061794778\""};
-
-	uint8_t Loc_u8Cmd5[]={"HAAA7"};
-	*/
-
-  //GSM_VidInit();
-  //HAL_Delay(1000);
-  //GSM_VidSendSMS((uint8_t*)"+201066221761",(uint8_t*) "Hello");
-  HAL_Delay(10000);
 
   /* USER CODE END 2 */
 
@@ -116,26 +96,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
-	  GSM_VidSendSMS("01099561728", "B7bk");
-	  HAL_Delay(10000);
-	  /*
-	    HAL_UART_Transmit(&GSM_UART, Loc_u8Cmd1, 2, 100);
-	  	HAL_UART_Transmit(&GSM_UART, (uint8_t*)"\n\r", 2 , 100);
-	  	HAL_Delay(500);
-	  	HAL_UART_Transmit(&GSM_UART, Loc_u8Cmd2, 9, 100);
-	  	HAL_UART_Transmit(&GSM_UART, (uint8_t*)"\n\r", 2 , 100);
-	  	HAL_Delay(500);
-	  	HAL_UART_Transmit(&GSM_UART, Loc_u8Cmd3, 8, 100);
-	  	HAL_UART_Transmit(&GSM_UART, Loc_u8Cmd4, 15, 100);
-	  	HAL_UART_Transmit(&GSM_UART, (uint8_t*)"\n\r", 2 , 100);
-	  	HAL_Delay(500);
-	  	HAL_UART_Transmit(&GSM_UART, Loc_u8Cmd5, 5, 100);
-	  	HAL_UART_Transmit(&GSM_UART, (uint8_t*)"\x1A", 1 , 100); //ctrlZ-> to send the message
-	  	//HAL_UART_Transmit(&huart3, (uint8_t*)"\n\r", 2 , 100);
-	  	HAL_Delay(500);
-	  	*/
-
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -230,8 +190,7 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-/**
-/**
+
 /* USER CODE END 4 */
 
 /**
