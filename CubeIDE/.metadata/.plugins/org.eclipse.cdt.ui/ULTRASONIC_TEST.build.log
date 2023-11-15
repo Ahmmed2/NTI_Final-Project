@@ -1,0 +1,21 @@
+12:47:04 **** Incremental Build of configuration Debug for project ULTRASONIC_TEST ****
+make -j12 all 
+arm-none-eabi-gcc "../Core/Src/Ultrasonic.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/Ultrasonic.d" -MT"Core/Src/Ultrasonic.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/Ultrasonic.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "ULTRASONIC_TEST.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\Courses\NTI\NTI_Final-Project\NTI_Final-Project\CubeIDE\ULTRASONIC_TEST\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ULTRASONIC_TEST.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ULTRASONIC_TEST.elf
+ 
+arm-none-eabi-size   ULTRASONIC_TEST.elf 
+arm-none-eabi-objdump -h -S  ULTRASONIC_TEST.elf  > "ULTRASONIC_TEST.list"
+arm-none-eabi-objcopy  -O ihex  ULTRASONIC_TEST.elf  "ULTRASONIC_TEST.hex"
+   text	   data	    bss	    dec	    hex	filename
+   9536	    116	   1692	  11344	   2c50	ULTRASONIC_TEST.elf
+Finished building: default.size.stdout
+ 
+Finished building: ULTRASONIC_TEST.hex
+ 
+Finished building: ULTRASONIC_TEST.list
+ 
+
+12:47:05 Build Finished. 0 errors, 0 warnings. (took 985ms)
+

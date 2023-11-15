@@ -63,8 +63,8 @@ all: main-build
 main-build: ULTRASONIC_TEST.elf secondary-outputs
 
 # Tool invocations
-ULTRASONIC_TEST.elf ULTRASONIC_TEST.map: $(OBJS) $(USER_OBJS) E:\alaa\ITI-IMT\ Diploma\STM32_CUBE\ULTRASONIC_TEST\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "ULTRASONIC_TEST.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"E:\alaa\ITI-IMT Diploma\STM32_CUBE\ULTRASONIC_TEST\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ULTRASONIC_TEST.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+ULTRASONIC_TEST.elf ULTRASONIC_TEST.map: $(OBJS) $(USER_OBJS) D:\Courses\NTI\NTI_Final-Project\NTI_Final-Project\CubeIDE\ULTRASONIC_TEST\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "ULTRASONIC_TEST.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"D:\Courses\NTI\NTI_Final-Project\NTI_Final-Project\CubeIDE\ULTRASONIC_TEST\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ULTRASONIC_TEST.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
