@@ -23,6 +23,7 @@
 /* USER CODE BEGIN Includes */
 #include "HAL/dc_motor.h"
 #include "HAL/Ultrasonic.h"
+#include "HAL/HAL_NRF.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -53,6 +54,9 @@ UART_HandleTypeDef huart1;
 
 /* Car State */
 uint8_t Car_State = STATE_STATIONARY ;
+uint8_t Car_Direction  ;
+uint8_t Car_Speed  ;
+uint8_t System_Mode = Stationary_Mode ;
 
 /* BM Receive Variable */
 uint8_t rxData ;
@@ -60,7 +64,25 @@ uint8_t TMR_Counter = 0 ;
 
 /* UltraSonic */
 uint16_t US_ARR[4] = {50 , 50, 50 , 50} ;
-uint8_t US_Decision  ;
+uint8_t US_Decision = 0 ;
+
+/* NRF */
+
+/* Address of PIPE 1 */
+uint8_t TxAddress[] = {0xEE,0xDD,0xCC,0xBB,0xAA} ;
+
+/* Data to be Sent */
+/*
+ * S --> Speed
+ * D --> Direction
+ * M --> Distance
+ * I --> Indication
+ *
+ */
+uint8_t Data_States[4] = {'S','D','M','I'}  ;
+uint8_t Data_Sent[8]  ;
+uint8_t Debug_Var ;
+DataTransfer_t Data_Tx ;
 
 /* USER CODE END PV */
 
@@ -73,8 +95,8 @@ static void MX_TIM3_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
-void APP_voidAction (uint8_t Copy_u8Action , uint8_t Copy_u8Direction);
 void APP_voidTakeDecision (uint8_t Copy_u8rxData);
+void APP_voidModeUpdate() ;
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -118,7 +140,15 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_voidUltraSonicInit() ;
   HAL_UART_Receive_IT(&huart1,&rxData,1); // Enabling interrupt receive
+  NRF_voidInit();
+  NRF_voidTransmitterMode (TxAddress ,10 );
 
+  Data_Tx.Speed 	 = 0 						;  /* Input from MOTION Branch     */
+  Data_Tx.Direction  = FORWARD 					;  /* Input from MOTION Branch     */
+  Data_Tx.Distance 	 = 0						;  /* Input from ULTRASONIC Branch */
+  Data_Tx.Indication = INDICATION_NORMAL 	    ;  /* Input from Emergency		   */
+
+  Data_Sent[6]     = Data_States[3]				;  /* Indication */
 
   /* USER CODE END 2 */
 
@@ -418,12 +448,12 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, TRIG_F_Pin|ECHO_F_Pin|IN1_Pin|IN2_Pin
-                          |TRIG_B_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, TRIG_F_Pin|NRF_CE_Pin|NRF_CSN_Pin|IN1_Pin
+                          |IN2_Pin|TRIG_B_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, TRIG_R_Pin|ECHO_R_Pin|EN2_Pin|TRIG_L_Pin
-                          |ECHO_L_Pin|ECHO_B_Pin|IN3_Pin|IN4_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, TRIG_R_Pin|EN2_Pin|TRIG_L_Pin|IN3_Pin
+                          |IN4_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : PC13 */
   GPIO_InitStruct.Pin = GPIO_PIN_13;
@@ -432,22 +462,34 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : TRIG_F_Pin ECHO_F_Pin IN1_Pin IN2_Pin
-                           TRIG_B_Pin */
-  GPIO_InitStruct.Pin = TRIG_F_Pin|ECHO_F_Pin|IN1_Pin|IN2_Pin
-                          |TRIG_B_Pin;
+  /*Configure GPIO pins : TRIG_F_Pin NRF_CE_Pin NRF_CSN_Pin IN1_Pin
+                           IN2_Pin TRIG_B_Pin */
+  GPIO_InitStruct.Pin = TRIG_F_Pin|NRF_CE_Pin|NRF_CSN_Pin|IN1_Pin
+                          |IN2_Pin|TRIG_B_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : TRIG_R_Pin ECHO_R_Pin EN2_Pin TRIG_L_Pin
-                           ECHO_L_Pin ECHO_B_Pin IN3_Pin IN4_Pin */
-  GPIO_InitStruct.Pin = TRIG_R_Pin|ECHO_R_Pin|EN2_Pin|TRIG_L_Pin
-                          |ECHO_L_Pin|ECHO_B_Pin|IN3_Pin|IN4_Pin;
+  /*Configure GPIO pin : PA4 */
+  GPIO_InitStruct.Pin = GPIO_PIN_4;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : TRIG_R_Pin EN2_Pin TRIG_L_Pin IN3_Pin
+                           IN4_Pin */
+  GPIO_InitStruct.Pin = TRIG_R_Pin|EN2_Pin|TRIG_L_Pin|IN3_Pin
+                          |IN4_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PB1 PB14 PB15 */
+  GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_14|GPIO_PIN_15;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
@@ -471,7 +513,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
   if(huart->Instance==USART1)
   {
-	  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
+
 	  APP_voidTakeDecision (rxData) ;
   }
 }
@@ -495,22 +537,22 @@ void APP_voidTakeDecision (uint8_t Copy_u8rxData)
 	{
 
 	case 'F' :
-		APP_voidAction (US_Decision,FORWARD) ;
+		Car_Direction = FORWARD ;
 		Car_State = STATE_MOVING ;
 		break ;
 
 	case 'B' :
-    	APP_voidAction (US_Decision,BACKWARD) ;
+		Car_Direction = BACKWARD ;
     	Car_State = STATE_MOVING ;
     	break ;
 
 	case 'R' :
-		APP_voidAction (US_Decision,RIGHT) ;
+		Car_Direction = RIGHT ;
 		Car_State = STATE_MOVING ;
     	break ;
 
 	case 'L' :
-		APP_voidAction (US_Decision,LEFT) ;
+		Car_Direction = LEFT ;
 		Car_State = STATE_MOVING ;
     	break ;
 
@@ -522,8 +564,33 @@ void APP_voidTakeDecision (uint8_t Copy_u8rxData)
 	}
 
 	HAL_UART_Receive_IT(&huart1,&rxData,1); // Enabling interrupt receive again
-
+	APP_voidModeUpdate();
+	if(System_Mode == Comm_Mode || System_Mode == Dominant_Mode || System_Mode == Emergency_Mode)
+	{
+		NRF_voidSendData (Data_Sent, 8 ,NRF_NUMBERS_EXIST  );
+	}
 }
+
+/**
+  * @brief
+  * 	   Update the Mode of operation that we are in
+  *
+  *
+  *
+  * @param Data from BM -->Copy_u8rxData
+  * @retval None
+  */
+
+void APP_voidModeUpdate()
+{
+	if(US_ARR[3] < 60 )
+	{
+		System_Mode = Comm_Mode ;
+	}
+	else
+		System_Mode = Normal_Mode ;
+}
+
 
 /**
   * @brief
@@ -537,7 +604,7 @@ void APP_voidTakeDecision (uint8_t Copy_u8rxData)
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-	HAL_UART_Transmit(&huart1,&rxData,1,100);
+
 
 	TMR_Counter ++ ;
 
@@ -546,6 +613,42 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
     /* Decision  */
     US_Decision = HAL_UltraSonic_Decision(US_ARR) ;
+
+	if (US_Decision == 254)
+	{
+		Data_Tx.Indication = Normal_Mode 	;
+		HAL_voidControlMotors(Normal_SPEED,Car_Direction) ;
+		Car_Speed = Normal_SPEED ;
+		HAL_UART_Transmit(&huart1,"D",1,100);
+	}
+	else if (US_Decision == STOP)
+	{
+		Data_Tx.Indication = INDICATION_SUDDEN_BRAKE 	;
+		HAL_voidControlMotors(SPEED_0,STOP) ;
+		Car_Speed = SPEED_0 ;
+		HAL_UART_Transmit(&huart1,"P",1,100);
+	}
+	else if (US_Decision == SPEED_25)
+	{
+		Data_Tx.Indication = INDICATION_OBSTACLE 	;
+		HAL_voidControlMotors(SPEED_25,Car_Direction) ;
+		Car_Speed = SPEED_25 ;
+		HAL_UART_Transmit(&huart1,"S",1,100);
+	}
+
+      /* Update NRF values*/
+      Data_Tx.Distance = US_ARR[3] 							;  /* Backward UltraSonic reading */
+	  Data_Sent[4]     = Data_States[2]						;  /* Distance  */
+	  Data_Sent[5]     = Data_Tx.Distance				    ;
+	  Data_Tx.Speed 	 = Car_Speed						;
+	  Data_Tx.Direction  = Car_Direction 					;
+
+	  Data_Sent[0] = Data_States[0]							;	/* Speed */
+	  Data_Sent[1] = Data_Tx.Speed							;
+	  Data_Sent[2] = Data_States[1]							;	/* Direction */
+	  Data_Sent[3] = Data_Tx.Direction						;
+	  Data_Sent[7] = Data_Tx.Indication						;
+
 
 	/* Delay 2 Second */
 	if (TMR_Counter == 10 )
@@ -557,23 +660,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	  }
 
 }
-void APP_voidAction (uint8_t Copy_u8Action , uint8_t Copy_u8Direction)
-{
-	/* NO Obstacle is Close */
-	if (Copy_u8Action == 254)
-	{
-		HAL_voidControlMotors(Normal_SPEED,Copy_u8Direction) ;
-	}
-	else if (Copy_u8Action == STOP)
-	{
-		HAL_voidControlMotors(SPEED_0,STOP) ;
-	}
-	else if (Copy_u8Action == SPEED_25)
-	{
-		HAL_voidControlMotors(SPEED_25,Copy_u8Direction) ;
-	}
 
-}
 
 /* USER CODE END 4 */
 

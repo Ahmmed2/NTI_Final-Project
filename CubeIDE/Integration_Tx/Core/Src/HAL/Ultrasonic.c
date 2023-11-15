@@ -10,7 +10,7 @@
 #include "HAL/Ultrasonic.h"
 #include "HAL/DC_MOTOR.h"
 
-
+extern UART_HandleTypeDef huart1;;
 extern TIM_HandleTypeDef htim2;
 uint32_t pMillis;
 uint32_t val1_Ultrsonic_1 = 0;
@@ -55,6 +55,8 @@ void HAL_voidUltraSonic (uint16_t *UltraSonic_Reading)
 	{
 		UltrasonicSensor sensor = ultrasonicSensors[i];
 
+
+
 		HAL_GPIO_WritePin(sensor.trigPort, sensor.trigPin, GPIO_PIN_SET);
 		__HAL_TIM_SET_COUNTER(&htim2, 0);
 		while (__HAL_TIM_GET_COUNTER(&htim2) < 10);  // wait for 10 us
@@ -68,8 +70,9 @@ void HAL_voidUltraSonic (uint16_t *UltraSonic_Reading)
 		while ((HAL_GPIO_ReadPin(sensor.echoPort, sensor.echoPin)) && pMillis + 50 > HAL_GetTick());
 		*(sensor.val2) = __HAL_TIM_GET_COUNTER(&htim2);
 
-		*(sensor.distance) = (*(sensor.val2) - *(sensor.val1)) * 0.034 / 2;
-		if (*(sensor.distance) > 0 && *(sensor.distance) < 100) {
+
+		*(sensor.distance) = (*(sensor.val2) - *(sensor.val1)) * 0.0022 ;
+/*		if (*(sensor.distance) > 0 && *(sensor.distance) < 100) {
 			*(sensor.distance) = *(sensor.distance) + 1;
 		} else if (*(sensor.distance) >= 100 && *(sensor.distance) <= 200) {
 			*(sensor.distance) = *(sensor.distance) + 2;
@@ -78,12 +81,36 @@ void HAL_voidUltraSonic (uint16_t *UltraSonic_Reading)
 		} else {
 			*(sensor.distance) = *(sensor.distance) + 4;
 		}
+*/
 
+/*		if ( (*(sensor.distance))>=0 &&  (*(sensor.distance))<40 )
+		{
+			*sensor.distance = *sensor.distance - 18 ;
+		}
+
+		else if ( (*(sensor.distance))>=40 &&  (*(sensor.distance))<65 )
+		{
+			*sensor.distance = (*sensor.distance - 48) ;
+		}
+		else if ((*(sensor.distance)) >= 65 &&  (*(sensor.distance))<75 )
+		{
+			*sensor.distance = *sensor.distance - 65 ;
+		}
+		else if ((*(sensor.distance)) >= 75 &&  (*(sensor.distance))<95 )
+		{
+			*sensor.distance = *sensor.distance - 70 ;
+		}
+		else if ( *(sensor.distance) >= 150 )
+		{
+			*sensor.distance = *sensor.distance - 135 ;
+		}
+*/
 		// Store the distance in the array
 		UltraSonic_Reading[i] = *(sensor.distance);
 
 
 	}
+
 }
 
 uint8_t HAL_UltraSonic_Decision(uint16_t *UltraSonic_Reading)
@@ -92,8 +119,9 @@ uint8_t HAL_UltraSonic_Decision(uint16_t *UltraSonic_Reading)
 	uint8_t Return_Value = 254 ;
 
 	/* About to Hit */
-	if ( (10 <= UltraSonic_Reading[0]) &&  (UltraSonic_Reading[0]<= 20) )
+	if ( (UltraSonic_Reading[0]<= 20) )
 	{
+		HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_RESET);
 		Return_Value = STOP ;
 
 	}
@@ -101,9 +129,11 @@ uint8_t HAL_UltraSonic_Decision(uint16_t *UltraSonic_Reading)
 	/* Close to Hit */
 	else if ((20 < UltraSonic_Reading[0]) &&  (UltraSonic_Reading[0]<= 30) )
 	{
+		HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_RESET);
 		Return_Value = SPEED_25 ;
 
 	}
+	else HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
 
 
 

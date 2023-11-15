@@ -61,20 +61,16 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define TRIG_F_Pin GPIO_PIN_0
 #define TRIG_F_GPIO_Port GPIOA
-#define ECHO_F_Pin GPIO_PIN_4
-#define ECHO_F_GPIO_Port GPIOA
+#define NRF_CE_Pin GPIO_PIN_1
+#define NRF_CE_GPIO_Port GPIOA
+#define NRF_CSN_Pin GPIO_PIN_2
+#define NRF_CSN_GPIO_Port GPIOA
 #define TRIG_R_Pin GPIO_PIN_0
 #define TRIG_R_GPIO_Port GPIOB
-#define ECHO_R_Pin GPIO_PIN_1
-#define ECHO_R_GPIO_Port GPIOB
 #define EN2_Pin GPIO_PIN_12
 #define EN2_GPIO_Port GPIOB
 #define TRIG_L_Pin GPIO_PIN_13
 #define TRIG_L_GPIO_Port GPIOB
-#define ECHO_L_Pin GPIO_PIN_14
-#define ECHO_L_GPIO_Port GPIOB
-#define ECHO_B_Pin GPIO_PIN_15
-#define ECHO_B_GPIO_Port GPIOB
 #define EN1_Pin GPIO_PIN_8
 #define EN1_GPIO_Port GPIOA
 #define IN1_Pin GPIO_PIN_11

@@ -1,2 +1,3 @@
-../Core/Src/HAL/Ultrasonic.c:14:6:HAL_voidUltraSonic	1
-../Core/Src/HAL/Ultrasonic.c:22:9:HAL_UltraSonic_Decision	5
+../Core/Src/HAL/Ultrasonic.c:45:6:HAL_voidUltraSonicInit	1
+../Core/Src/HAL/Ultrasonic.c:51:6:HAL_voidUltraSonic	7
+../Core/Src/HAL/Ultrasonic.c:116:9:HAL_UltraSonic_Decision	4
