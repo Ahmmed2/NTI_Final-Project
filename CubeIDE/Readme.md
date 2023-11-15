@@ -41,7 +41,7 @@
 - ECHO->GPIOB->PIN_B15
 
 ### Bluetooth Module
-- Tx -> UART1_Rx (PIN_A10)
-- Rx -> UART1_Tx (PIN_A9)
+- Tx -> UART1_Rx (PIN_B7)
+- Rx -> UART1_Tx (PIN_B6)
 - VCC -> 3.3v
 - GND -> GND
