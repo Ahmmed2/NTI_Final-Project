@@ -44,6 +44,7 @@
 SPI_HandleTypeDef hspi1;
 
 TIM_HandleTypeDef htim1;
+TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 
 UART_HandleTypeDef huart1;
@@ -70,6 +71,7 @@ static void MX_TIM1_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_TIM3_Init(void);
 static void MX_SPI1_Init(void);
+static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
 void APP_voidAction (uint8_t Copy_u8Action , uint8_t Copy_u8Direction);
 void APP_voidTakeDecision (uint8_t Copy_u8rxData);
@@ -112,6 +114,7 @@ int main(void)
   MX_USART1_UART_Init();
   MX_TIM3_Init();
   MX_SPI1_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
   HAL_voidUltraSonicInit() ;
   HAL_UART_Receive_IT(&huart1,&rxData,1); // Enabling interrupt receive
@@ -272,6 +275,51 @@ static void MX_TIM1_Init(void)
 }
 
 /**
+  * @brief TIM2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM2_Init(void)
+{
+
+  /* USER CODE BEGIN TIM2_Init 0 */
+
+  /* USER CODE END TIM2_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM2_Init 1 */
+
+  /* USER CODE END TIM2_Init 1 */
+  htim2.Instance = TIM2;
+  htim2.Init.Prescaler = 0;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim2.Init.Period = 65535;
+  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM2_Init 2 */
+
+  /* USER CODE END TIM2_Init 2 */
+
+}
+
+/**
   * @brief TIM3 Initialization Function
   * @param None
   * @retval None
@@ -370,10 +418,12 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, EN2_Pin|IN3_Pin|IN4_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, TRIG_F_Pin|ECHO_F_Pin|IN1_Pin|IN2_Pin
+                          |TRIG_B_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, IN1_Pin|IN2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, TRIG_R_Pin|ECHO_R_Pin|EN2_Pin|TRIG_L_Pin
+                          |ECHO_L_Pin|ECHO_B_Pin|IN3_Pin|IN4_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : PC13 */
   GPIO_InitStruct.Pin = GPIO_PIN_13;
@@ -382,19 +432,23 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : EN2_Pin IN3_Pin IN4_Pin */
-  GPIO_InitStruct.Pin = EN2_Pin|IN3_Pin|IN4_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : IN1_Pin IN2_Pin */
-  GPIO_InitStruct.Pin = IN1_Pin|IN2_Pin;
+  /*Configure GPIO pins : TRIG_F_Pin ECHO_F_Pin IN1_Pin IN2_Pin
+                           TRIG_B_Pin */
+  GPIO_InitStruct.Pin = TRIG_F_Pin|ECHO_F_Pin|IN1_Pin|IN2_Pin
+                          |TRIG_B_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : TRIG_R_Pin ECHO_R_Pin EN2_Pin TRIG_L_Pin
+                           ECHO_L_Pin ECHO_B_Pin IN3_Pin IN4_Pin */
+  GPIO_InitStruct.Pin = TRIG_R_Pin|ECHO_R_Pin|EN2_Pin|TRIG_L_Pin
+                          |ECHO_L_Pin|ECHO_B_Pin|IN3_Pin|IN4_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
@@ -483,7 +537,7 @@ void APP_voidTakeDecision (uint8_t Copy_u8rxData)
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-	HAL_UART_Transmit(&huart1,&TMR_Counter+48,1,100);
+	HAL_UART_Transmit(&huart1,&rxData,1,100);
 
 	TMR_Counter ++ ;
 

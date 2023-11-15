@@ -16,7 +16,7 @@
 #define ULTRA_2 		1
 #define ULTRA_3 		2
 #define ULTRA_4 		3
-#define ULTRA_COUNT	    4
+#define ULTRA_COUNT	    1
 
 extern uint32_t pMillis;
 

@@ -28,11 +28,18 @@ uint16_t distance3 = 0;
 uint16_t distance4 = 0;
 
 
+/*
+ * Forward
+ * Right
+ * Left
+ * Backward
+ */
+
 UltrasonicSensor ultrasonicSensors[ULTRA_COUNT] = {
     {GPIOA, GPIOA, GPIO_PIN_0, GPIO_PIN_4, &val1_Ultrsonic_1, &val2_Ultrsonic_1, &distance1},
-    {GPIOB, GPIOB, GPIO_PIN_0, GPIO_PIN_1, &val1_Ultrsonic_2, &val2_Ultrsonic_2, &distance2},
-    {GPIOB, GPIOB, GPIO_PIN_13, GPIO_PIN_14, &val1_Ultrsonic_3, &val2_Ultrsonic_3, &distance3},
-    {GPIOA, GPIOB, GPIO_PIN_15, GPIO_PIN_15, &val1_Ultrsonic_4, &val2_Ultrsonic_4, &distance4}
+   //{GPIOB, GPIOB, GPIO_PIN_0, GPIO_PIN_1, &val1_Ultrsonic_2, &val2_Ultrsonic_2, &distance2},
+   // {GPIOB, GPIOB, GPIO_PIN_13, GPIO_PIN_14, &val1_Ultrsonic_3, &val2_Ultrsonic_3, &distance3},
+   // {GPIOA, GPIOB, GPIO_PIN_15, GPIO_PIN_15, &val1_Ultrsonic_4, &val2_Ultrsonic_4, &distance4}
 };
 
 void HAL_voidUltraSonicInit(void)
