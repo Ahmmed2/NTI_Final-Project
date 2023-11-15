@@ -30,16 +30,23 @@
 #### Ultrasonic 1
 - TRIG->GPIOA->PIN_A0
 - ECHO->GPIOA->PIN_A4
+- VCC -> 3.3v
+- GND -> GND
 #### Ultrasonic 2
 - TRIG->GPIOB->PIN_B0
 - ECHO->GPIOB->PIN_B1
+- VCC -> 3.3v
+- GND -> GND
 #### Ultrasonic 3
 - TRIG->GPIOB->PIN_B13
 - ECHO->GPIOB->PIN_B14
+- VCC -> 3.3v
+- GND -> GND
 #### Ultrasonic 4
 - TRIG->GPIOA->PIN_A15
 - ECHO->GPIOB->PIN_B15
-
+- VCC -> 3.3v
+- GND -> GND
 ### Bluetooth Module
 - Tx -> UART1_Rx (PIN_B7)
 - Rx -> UART1_Tx (PIN_B6)
