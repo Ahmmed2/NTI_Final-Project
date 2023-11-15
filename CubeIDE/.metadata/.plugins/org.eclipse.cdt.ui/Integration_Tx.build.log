@@ -1,21 +1,15 @@
-02:40:47 **** Incremental Build of configuration Debug for project Integration_Tx ****
+14:05:05 **** Incremental Build of configuration Debug for project Integration_Tx ****
 make -j12 all 
-arm-none-eabi-gcc "../Core/Src/HAL/DC_MOTOR.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/HAL/DC_MOTOR.d" -MT"Core/Src/HAL/DC_MOTOR.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/HAL/DC_MOTOR.o"
 arm-none-eabi-gcc "../Core/Src/HAL/Ultrasonic.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/HAL/Ultrasonic.d" -MT"Core/Src/HAL/Ultrasonic.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/HAL/Ultrasonic.o"
-arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
 arm-none-eabi-gcc -o "Integration_Tx.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\Courses\NTI\NTI_Final-Project\NTI_Final-Project\CubeIDE\Integration_Tx\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Integration_Tx.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
-Finished building target: Integration_Tx.elf
- 
-arm-none-eabi-size   Integration_Tx.elf 
-arm-none-eabi-objdump -h -S  Integration_Tx.elf  > "Integration_Tx.list"
-   text	   data	    bss	    dec	    hex	filename
-  15040	     28	   1876	  16944	   4230	Integration_Tx.elf
-Finished building: default.size.stdout
- 
-Finished building: Integration_Tx.list
- 
-arm-none-eabi-objcopy -O ihex Integration_Tx.elf Integration_Tx.hex
- 
+C:/ST/STM32CubeIDE_1.13.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.0.202305231506/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/HAL/Ultrasonic.o: in function `HAL_voidUltraSonicInit':
+D:/Courses/NTI/NTI_Final-Project/NTI_Final-Project/CubeIDE/Integration_Tx/Debug/../Core/Src/HAL/Ultrasonic.c:41: undefined reference to `htim2'
+C:/ST/STM32CubeIDE_1.13.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.0.202305231506/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/HAL/Ultrasonic.o: in function `HAL_voidUltraSonic':
+D:/Courses/NTI/NTI_Final-Project/NTI_Final-Project/CubeIDE/Integration_Tx/Debug/../Core/Src/HAL/Ultrasonic.c:80: undefined reference to `htim2'
+collect2.exe: error: ld returned 1 exit status
+make[1]: *** [makefile:66: Integration_Tx.elf] Error 1
+make: *** [makefile:59: all] Error 2
+"make -j12 all" terminated with exit code 2. Build might be incomplete.
 
-02:40:49 Build Finished. 0 errors, 0 warnings. (took 1s.468ms)
+14:05:06 Build Failed. 6 errors, 0 warnings. (took 1s.440ms)
 
