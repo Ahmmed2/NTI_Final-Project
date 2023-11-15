@@ -365,9 +365,10 @@ void NRF_voidSendData (uint8_t * Data , uint8_t Copy_u8SizeinByte ,uint8_t Copy_
 }
 
 /**
- * Brief :  Send Number through NRF .
+ * Brief :  Handle Number with Characters  .
  *
  * Parameters : Number that you want to send --> Copy_u32Number
+ * 				Index of array you want to start --> Copy_u8Number_Index
  * Synchronous
  * Non reentrant
  * Return : NONE

@@ -115,6 +115,14 @@ typedef struct
 }DataTransfer_t;
 
 
+/* System Modes */
+#define 	Comm_Mode				0
+#define 	Dominant_Mode			1
+#define 	Emergency_Mode			2
+#define		Stationary_Mode			3
+#define		Normal_Mode				4
+
+
 /***************Data Type Definitions END   *****************/
 
 

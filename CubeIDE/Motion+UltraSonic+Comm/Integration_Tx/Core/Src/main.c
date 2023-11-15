@@ -45,6 +45,7 @@
 SPI_HandleTypeDef hspi1;
 
 TIM_HandleTypeDef htim1;
+TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 
 UART_HandleTypeDef huart1;
@@ -53,7 +54,8 @@ UART_HandleTypeDef huart1;
 
 /* Car State */
 uint8_t Car_State = STATE_STATIONARY ;
-
+uint8_t Car_Direction  ;
+uint8_t Car_Speed  ;
 uint8_t System_Mode = Stationary_Mode ;
 
 /* BM Receive Variable */
@@ -61,26 +63,11 @@ uint8_t rxData ;
 uint8_t TMR_Counter = 0 ;
 
 /* UltraSonic */
-uint16_t US_ARR[4] ;
-uint8_t US_Decision ;
+uint16_t US_ARR[4] = {50 , 50, 50 , 50} ;
+uint8_t US_Decision = 0 ;
 
-/* USER CODE END PV */
+/* NRF */
 
-/* Private function prototypes -----------------------------------------------*/
-void SystemClock_Config(void);
-static void MX_GPIO_Init(void);
-static void MX_TIM1_Init(void);
-static void MX_USART1_UART_Init(void);
-static void MX_TIM3_Init(void);
-static void MX_SPI1_Init(void);
-/* USER CODE BEGIN PFP */
-void APP_voidAction (uint8_t Copy_u8Action , uint8_t Copy_u8Direction) ;
-void APP_voidTakeDecision (uint8_t Copy_u8rxData) ;
-void APP_voidModeUpdate();
-/* USER CODE END PFP */
-
-/* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
 /* Address of PIPE 1 */
 uint8_t TxAddress[] = {0xEE,0xDD,0xCC,0xBB,0xAA} ;
 
@@ -92,11 +79,28 @@ uint8_t TxAddress[] = {0xEE,0xDD,0xCC,0xBB,0xAA} ;
  * I --> Indication
  *
  */
-/* SDMI */
-uint8_t Data_States[5] = {'S','D','M','I'}  ;
+uint8_t Data_States[4] = {'S','D','M','I'}  ;
 uint8_t Data_Sent[8]  ;
 uint8_t Debug_Var ;
 DataTransfer_t Data_Tx ;
+
+/* USER CODE END PV */
+
+/* Private function prototypes -----------------------------------------------*/
+void SystemClock_Config(void);
+static void MX_GPIO_Init(void);
+static void MX_TIM1_Init(void);
+static void MX_USART1_UART_Init(void);
+static void MX_TIM3_Init(void);
+static void MX_SPI1_Init(void);
+static void MX_TIM2_Init(void);
+/* USER CODE BEGIN PFP */
+void APP_voidTakeDecision (uint8_t Copy_u8rxData);
+void APP_voidModeUpdate() ;
+/* USER CODE END PFP */
+
+/* Private user code ---------------------------------------------------------*/
+/* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
 
@@ -116,7 +120,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-  NRF_voidInit();
+
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -132,17 +136,19 @@ int main(void)
   MX_USART1_UART_Init();
   MX_TIM3_Init();
   MX_SPI1_Init();
-  HAL_UART_Receive_IT(&huart1,&rxData,1); // Enabling interrupt receive
-  HAL_TIM_OC_MspInit(&htim3) ;
-  NRF_voidTransmitterMode (TxAddress ,10 );
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
+  HAL_voidUltraSonicInit() ;
+  HAL_UART_Receive_IT(&huart1,&rxData,1); // Enabling interrupt receive
+  NRF_voidInit();
+  NRF_voidTransmitterMode (TxAddress ,10 );
 
   Data_Tx.Speed 	 = 0 						;  /* Input from MOTION Branch     */
   Data_Tx.Direction  = FORWARD 					;  /* Input from MOTION Branch     */
   Data_Tx.Distance 	 = 0						;  /* Input from ULTRASONIC Branch */
   Data_Tx.Indication = INDICATION_NORMAL 	    ;  /* Input from Emergency		   */
 
-  Data_Sent[6]     = Data_States[3]				;
+  Data_Sent[6]     = Data_States[3]				;  /* Indication */
 
   /* USER CODE END 2 */
 
@@ -253,9 +259,9 @@ static void MX_TIM1_Init(void)
 
   /* USER CODE END TIM1_Init 1 */
   htim1.Instance = TIM1;
-  htim1.Init.Prescaler = 0;
+  htim1.Init.Prescaler = 64;
   htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim1.Init.Period = 65535;
+  htim1.Init.Period = 256;
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim1.Init.RepetitionCounter = 0;
   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -280,10 +286,6 @@ static void MX_TIM1_Init(void)
   {
     Error_Handler();
   }
-  if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
-  {
-    Error_Handler();
-  }
   sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
   sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
   sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
@@ -303,6 +305,51 @@ static void MX_TIM1_Init(void)
 }
 
 /**
+  * @brief TIM2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM2_Init(void)
+{
+
+  /* USER CODE BEGIN TIM2_Init 0 */
+
+  /* USER CODE END TIM2_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM2_Init 1 */
+
+  /* USER CODE END TIM2_Init 1 */
+  htim2.Instance = TIM2;
+  htim2.Init.Prescaler = 0;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim2.Init.Period = 65535;
+  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM2_Init 2 */
+
+  /* USER CODE END TIM2_Init 2 */
+
+}
+
+/**
   * @brief TIM3 Initialization Function
   * @param None
   * @retval None
@@ -314,8 +361,8 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 0 */
 
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
-  TIM_OC_InitTypeDef sConfigOC = {0};
 
   /* USER CODE BEGIN TIM3_Init 1 */
 
@@ -326,21 +373,18 @@ static void MX_TIM3_Init(void)
   htim3.Init.Period = 50000;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_OC_Init(&htim3) != HAL_OK)
+  if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim3, &sClockSourceConfig) != HAL_OK)
   {
     Error_Handler();
   }
   sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
   if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sConfigOC.OCMode = TIM_OCMODE_TIMING;
-  sConfigOC.Pulse = 0;
-  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  if (HAL_TIM_OC_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
   {
     Error_Handler();
   }
@@ -404,7 +448,12 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, NRF_CE_Pin|NRF_CSN_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, TRIG_F_Pin|NRF_CE_Pin|NRF_CSN_Pin|IN1_Pin
+                          |IN2_Pin|TRIG_B_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, TRIG_R_Pin|EN2_Pin|TRIG_L_Pin|IN3_Pin
+                          |IN4_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : PC13 */
   GPIO_InitStruct.Pin = GPIO_PIN_13;
@@ -413,12 +462,35 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : NRF_CE_Pin NRF_CSN_Pin */
-  GPIO_InitStruct.Pin = NRF_CE_Pin|NRF_CSN_Pin;
+  /*Configure GPIO pins : TRIG_F_Pin NRF_CE_Pin NRF_CSN_Pin IN1_Pin
+                           IN2_Pin TRIG_B_Pin */
+  GPIO_InitStruct.Pin = TRIG_F_Pin|NRF_CE_Pin|NRF_CSN_Pin|IN1_Pin
+                          |IN2_Pin|TRIG_B_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PA4 */
+  GPIO_InitStruct.Pin = GPIO_PIN_4;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : TRIG_R_Pin EN2_Pin TRIG_L_Pin IN3_Pin
+                           IN4_Pin */
+  GPIO_InitStruct.Pin = TRIG_R_Pin|EN2_Pin|TRIG_L_Pin|IN3_Pin
+                          |IN4_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PB1 PB14 PB15 */
+  GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_14|GPIO_PIN_15;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
@@ -441,7 +513,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
   if(huart->Instance==USART1)
   {
-	  APP_voidTakeDecision(rxData) ;
+
+	  APP_voidTakeDecision (rxData) ;
   }
 }
 
@@ -449,7 +522,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
   * @brief
   * 	   Receive Commands from BM and Start to Move in certain Direction
   * 	   Depend on the Value of rxData
-  * 	   Any Action will be executed for 2 Seconds only  .
+  * 	   Any Action will be executed  for 2 Seconds only  .
   *
   * @param Data from BM -->Copy_u8rxData
   * @retval None
@@ -458,28 +531,28 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 void APP_voidTakeDecision (uint8_t Copy_u8rxData)
 {
 	/* Start Timer */
-	HAL_TIM_OC_Start_IT(&htim3,TIM_CHANNEL_1) ;
+	HAL_TIM_Base_Start_IT(&htim3) ;
 
 	switch (Copy_u8rxData)
 	{
 
 	case 'F' :
-		APP_voidAction (US_Decision,FORWARD) ;
+		Car_Direction = FORWARD ;
 		Car_State = STATE_MOVING ;
 		break ;
 
 	case 'B' :
-    	APP_voidAction (US_Decision,BACKWARD) ;
+		Car_Direction = BACKWARD ;
     	Car_State = STATE_MOVING ;
     	break ;
 
 	case 'R' :
-		APP_voidAction (US_Decision,RIGHT) ;
+		Car_Direction = RIGHT ;
 		Car_State = STATE_MOVING ;
     	break ;
 
 	case 'L' :
-		APP_voidAction (US_Decision,LEFT) ;
+		Car_Direction = LEFT ;
 		Car_State = STATE_MOVING ;
     	break ;
 
@@ -487,10 +560,6 @@ void APP_voidTakeDecision (uint8_t Copy_u8rxData)
 		HAL_voidControlMotors(SPEED_0,STOP) ;
 		Car_State = STATE_STOP ;
     	break ;
-
-	case 'S' :
-		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
-		break ;
 
 	}
 
@@ -501,6 +570,16 @@ void APP_voidTakeDecision (uint8_t Copy_u8rxData)
 		NRF_voidSendData (Data_Sent, 8 ,NRF_NUMBERS_EXIST  );
 	}
 }
+
+/**
+  * @brief
+  * 	   Update the Mode of operation that we are in
+  *
+  *
+  *
+  * @param Data from BM -->Copy_u8rxData
+  * @retval None
+  */
 
 void APP_voidModeUpdate()
 {
@@ -523,64 +602,65 @@ void APP_voidModeUpdate()
   * @retval None
   */
 
-void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
+
+
 	TMR_Counter ++ ;
 
     /* Reading of all UltraSonic */
     HAL_voidUltraSonic(US_ARR) ;
 
-    /* Update NRF values*/
-    Data_Tx.Distance = US_ARR[3] 						;  /* Backward UltraSonic reading */
-	Data_Sent[4]     = Data_States[2]					;
-    Data_Sent[5]     = Data_Tx.Distance				    ;
-
     /* Decision  */
     US_Decision = HAL_UltraSonic_Decision(US_ARR) ;
+
+	if (US_Decision == 254)
+	{
+		Data_Tx.Indication = Normal_Mode 	;
+		HAL_voidControlMotors(Normal_SPEED,Car_Direction) ;
+		Car_Speed = Normal_SPEED ;
+		HAL_UART_Transmit(&huart1,"D",1,100);
+	}
+	else if (US_Decision == STOP)
+	{
+		Data_Tx.Indication = INDICATION_SUDDEN_BRAKE 	;
+		HAL_voidControlMotors(SPEED_0,STOP) ;
+		Car_Speed = SPEED_0 ;
+		HAL_UART_Transmit(&huart1,"P",1,100);
+	}
+	else if (US_Decision == SPEED_25)
+	{
+		Data_Tx.Indication = INDICATION_OBSTACLE 	;
+		HAL_voidControlMotors(SPEED_25,Car_Direction) ;
+		Car_Speed = SPEED_25 ;
+		HAL_UART_Transmit(&huart1,"S",1,100);
+	}
+
+      /* Update NRF values*/
+      Data_Tx.Distance = US_ARR[3] 							;  /* Backward UltraSonic reading */
+	  Data_Sent[4]     = Data_States[2]						;  /* Distance  */
+	  Data_Sent[5]     = Data_Tx.Distance				    ;
+	  Data_Tx.Speed 	 = Car_Speed						;
+	  Data_Tx.Direction  = Car_Direction 					;
+
+	  Data_Sent[0] = Data_States[0]							;	/* Speed */
+	  Data_Sent[1] = Data_Tx.Speed							;
+	  Data_Sent[2] = Data_States[1]							;	/* Direction */
+	  Data_Sent[3] = Data_Tx.Direction						;
+	  Data_Sent[7] = Data_Tx.Indication						;
+
 
 	/* Delay 2 Second */
 	if (TMR_Counter == 10 )
 	  {
-
 		TMR_Counter = 0 ;
 		HAL_voidControlMotors(SPEED_0 , STOP ) 	  ;
-		HAL_TIM_OC_Stop_IT (&htim3,TIM_CHANNEL_1) ;
+		HAL_TIM_Base_Stop_IT(&htim3)  ;
 
 	  }
 
 }
-void APP_voidAction (uint8_t Copy_u8Action , uint8_t Copy_u8Direction)
-{
-	uint8_t Local_speed;
-	/* NO Obstacle is Close */
-	if (Copy_u8Action == 254)
-	{
-		Data_Tx.Indication = Normal_Mode 	;
-		Local_speed = SPEED_50 ;
-		HAL_voidControlMotors(SPEED_50,Copy_u8Direction) ;
 
-	}
-	else if (Copy_u8Action == STOP)
-	{
-		Data_Tx.Indication = INDICATION_SUDDEN_BRAKE 	;
-		Local_speed = SPEED_0 ;
-		HAL_voidControlMotors(SPEED_0,STOP) ;
-	}
-	else if (Copy_u8Action == SPEED_25)
-	{
-		Data_Tx.Indication = INDICATION_OBSTACLE 	;
-		Local_speed = SPEED_25 ;
-		HAL_voidControlMotors(SPEED_25,Copy_u8Direction) ;
-	}
-	  Data_Tx.Speed 	 = Local_speed						;
-	  Data_Tx.Direction  = Copy_u8Direction 				;
-
-	  Data_Sent[0] = Data_States[0]							;
-	  Data_Sent[1] = Data_Tx.Speed							;
-	  Data_Sent[2] = Data_States[1]							;
-	  Data_Sent[3] = Data_Tx.Direction						;
-	  Data_Sent[7] = Data_Tx.Indication						;
-}
 
 /* USER CODE END 4 */
 

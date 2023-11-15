@@ -11,31 +11,38 @@
 
 #include "stm32f1xx_hal.h"
 // Motor Driver Port
-#define MOTOR_DRIVER_PORT GPIOA
+#define MOTOR_1_PORT GPIOA
 
-
+#define MOTOR_2_PORT GPIOB
 // Motor 1 GPIO pin definitions
-#define MOTOR1_IN1_PIN GPIO_PIN_0
-#define MOTOR1_IN2_PIN GPIO_PIN_1
+#define MOTOR1_IN1_PIN GPIO_PIN_11
+#define MOTOR1_IN2_PIN GPIO_PIN_12
 
 // Motor 2 GPIO pin definitions
-#define MOTOR2_IN3_PIN GPIO_PIN_2
-#define MOTOR2_IN4_PIN GPIO_PIN_3
+#define MOTOR2_EN_PIN  GPIO_PIN_12
+#define MOTOR2_IN3_PIN GPIO_PIN_8
+#define MOTOR2_IN4_PIN GPIO_PIN_9
 
 // Define Directions
-#define STOP 			0
-#define FORWARD 		1
-#define BACKWARD 		2
-#define RIGHT			3
-#define LEFT 			4
-
+#define STOP 0
+#define FORWARD 1
+#define BACKWARD 2
+#define RIGHT 3
+#define LEFT 4
 
 /* Speeds */
 #define SPEED_0				0
 #define	SPEED_25			25
+#define	SPEED_20			20
+#define SPEED_35			35
 #define	SPEED_50			50
 #define	SPEED_75			75
 #define	SPEED_100			100
+
+/**/
+#define Normal_SPEED		SPEED_50
+#define DECELARTING_SPEED	SPEED_20
+#define Emergency_SPEED		SPEED_0
 
 /* Car States */
 /**
@@ -60,7 +67,7 @@ Return:                                     None
  * the speed using the speed parameter.It uses GPIO pins to control the direction
  * and a hardware timer (TIM1) for PWM generation.
  */
-void HAL_voidControlMotors(uint8_t Copy_u8Speed, uint8_t Copy_u8direction) ;
+void HAL_voidControlMotors(uint8_t speed, uint8_t direction);
 
 
 #endif /* INC_DC_MOTOR_H_ */

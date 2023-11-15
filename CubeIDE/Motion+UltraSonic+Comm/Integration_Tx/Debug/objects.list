@@ -1,5 +1,4 @@
 "./Core/Src/HAL/DC_MOTOR.o"
-"./Core/Src/HAL/HAL_LCD.o"
 "./Core/Src/HAL/HAL_NRF.o"
 "./Core/Src/HAL/Ultrasonic.o"
 "./Core/Src/main.o"

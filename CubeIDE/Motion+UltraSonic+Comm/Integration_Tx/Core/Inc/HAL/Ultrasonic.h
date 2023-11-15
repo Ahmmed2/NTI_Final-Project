@@ -12,10 +12,14 @@
 
 /* Pins */
 
-#define TRIG_PIN 		GPIO_PIN_1
-#define TRIG_PORT 		GPIOB
-#define ECHO_PIN 		GPIO_PIN_0
-#define ECHO_PORT 		GPIOB
+#define ULTRA_1 		0
+#define ULTRA_2 		1
+#define ULTRA_3 		2
+#define ULTRA_4 		3
+#define ULTRA_COUNT	    1
+
+extern uint32_t pMillis;
+
 
 /* UltraSonic Directions */
 
@@ -24,9 +28,21 @@
 #define US_LEFT				2
 #define US_RIGHT			3
 
+typedef struct {
+    GPIO_TypeDef* trigPort;
+    GPIO_TypeDef* echoPort;
+    uint16_t trigPin;
+    uint16_t echoPin;
+    uint32_t* val1;
+    uint32_t* val2;
+    uint16_t* distance;
+} UltrasonicSensor;
+
+
 
 /* SW Function Decelerations */
-void HAL_voidUltraSonic (uint16_t *UltraSonic_Reading) 		         ;
-uint8_t HAL_UltraSonic_Decision(uint16_t *UltraSonic_Reading) 			 ;
+void HAL_voidUltraSonicInit(void)										;
+void HAL_voidUltraSonic (uint16_t *UltraSonic_Reading) 		         	;
+uint8_t HAL_UltraSonic_Decision(uint16_t *UltraSonic_Reading) 			;
 
 #endif /* INC_HAL_ULTRASONIC_H_ */
