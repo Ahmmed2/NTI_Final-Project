@@ -17,6 +17,8 @@
 ### GSM module 
 - PinB10 -> UART3 TX
 - PinB11 -> UART3 RX
+- GND    -> GND
+- VCC    -> 5V
 
 ### Motion 
 - Motor->1 pins En1->(Timer1_CH1)->GPIOA -> PIN_A8
@@ -51,4 +53,8 @@
 - Tx -> UART1_Rx (PIN_B7)
 - Rx -> UART1_Tx (PIN_B6)
 - VCC -> 3.3v
+- GND -> GND
+
+### Lmit Switch
+- Pin -> GPIOA -> A3
 - GND -> GND
