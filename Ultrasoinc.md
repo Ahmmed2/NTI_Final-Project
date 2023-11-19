@@ -1,4 +1,4 @@
-# Ultrasoin Module Documentation
+# Ultrasoinc Sensor Documentation
 
 ## 1. Introduction
 ### Overview
