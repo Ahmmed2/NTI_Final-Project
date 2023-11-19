@@ -99,6 +99,7 @@ uint8_t Debug_Var ;
 DataTransfer_t Data_Tx ;
 
 
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -652,6 +653,7 @@ void Init_Task(void const * argument)
 	    while(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_3))
 	    {
 	    	System_Mode = Emergency_Mode;
+	    	GSM_VidSendSMS((uint8_t*)"01003676020", (uint8_t*)"Robbery is Happening");
 	    }
 	    HAL_UART_Receive_IT(&huart1,&rxData,1); // Enabling interrupt receive
 
@@ -701,6 +703,17 @@ void VehicleComm_Task(void const * argument)
   /* Infinite loop */
   for(;;)
   {
+	  uint8_t Rx_data[8];
+	  for(uint8_t i = 0 ; i < 8 ; i++)
+	  {
+		  xQueueReceive(Rx_QueueHandle, &Rx_data[i], portMAX_DELAY);
+	  }
+	  osSemaphoreWait(Mode_SemHandle, osWaitForever);
+	  if(System_Mode == Comm_Mode || System_Mode == Dominant_Mode || System_Mode == Emergency_Mode)
+	  {
+		  NRF_voidSendData (Rx_data, 8 ,NRF_NUMBERS_EXIST  );
+	  }
+	  osSemaphoreRelease(Mode_SemHandle);
     osDelay(1);
   }
   /* USER CODE END VehicleComm_Task */
@@ -715,6 +728,8 @@ void ActionDecision_Callback(void const * argument)
 	  {
 		 xQueueReceive( Tx_QueueHandle, &US_data[i] , portMAX_DELAY );
 	  }
+	 xQueueSend( US_QueueHandle, &US_data[0] , portMAX_DELAY );
+	 xQueueSend( US_QueueHandle, &US_data[3] , portMAX_DELAY );
 	 xQueueReceive( Tx_QueueHandle, &BM , portMAX_DELAY );
 	switch (BM)
 		  	{
@@ -777,14 +792,14 @@ void ActionDecision_Callback(void const * argument)
 	Data_Sent[6]	 = Data_States[3]						;
 	Data_Sent[7]	 = Indication_value						;
 
-	xQueueSend( Tx_QueueHandle, &Data_States[0] , portMAX_DELAY );
-	xQueueSend( Tx_QueueHandle, &Data_Sent[1] , portMAX_DELAY );
-	xQueueSend( Tx_QueueHandle, &Data_States[1] , portMAX_DELAY );
-	xQueueSend( Tx_QueueHandle, &Data_Sent[3] , portMAX_DELAY );
-	xQueueSend( Tx_QueueHandle, &Data_States[2] , portMAX_DELAY );
-	xQueueSend( Tx_QueueHandle, &Data_Sent[5] , portMAX_DELAY );
-	xQueueSend( Tx_QueueHandle, &Data_States[3] , portMAX_DELAY );
-	xQueueSend( Tx_QueueHandle, &Data_Sent[7] , portMAX_DELAY );
+	xQueueSend( Rx_QueueHandle, &Data_States[0] , portMAX_DELAY );
+	xQueueSend( Rx_QueueHandle, &Data_Sent[1] , portMAX_DELAY );
+	xQueueSend( Rx_QueueHandle, &Data_States[1] , portMAX_DELAY );
+	xQueueSend( Rx_QueueHandle, &Data_Sent[3] , portMAX_DELAY );
+	xQueueSend( Rx_QueueHandle, &Data_States[2] , portMAX_DELAY );
+	xQueueSend( Rx_QueueHandle, &Data_Sent[5] , portMAX_DELAY );
+	xQueueSend( Rx_QueueHandle, &Data_States[3] , portMAX_DELAY );
+	xQueueSend( Rx_QueueHandle, &Data_Sent[7] , portMAX_DELAY );
   /* USER CODE END ActionDecision_Callback */
 }
 
@@ -792,7 +807,24 @@ void ActionDecision_Callback(void const * argument)
 void Mode_Callback(void const * argument)
 {
   /* USER CODE BEGIN Mode_Callback */
+	uint8_t US_Forward , US_Backward;
+	xQueueReceive( US_QueueHandle, &US_Forward , portMAX_DELAY );
+	xQueueReceive( US_QueueHandle, &US_Backward , portMAX_DELAY );
 
+	osSemaphoreWait(Mode_SemHandle, osWaitForever);
+	if(US_Backward < 60)
+	{
+		System_Mode = Comm_Mode ;
+	}
+
+	if(US_Forward <= 10)
+	{
+		System_Mode = Dominant_Mode ;
+
+	}
+	else
+		System_Mode = Normal_Mode ;
+	osSemaphoreRelease(Mode_SemHandle);
   /* USER CODE END Mode_Callback */
 }
 

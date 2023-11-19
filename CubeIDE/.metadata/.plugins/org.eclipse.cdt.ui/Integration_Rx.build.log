@@ -1,0 +1,65 @@
+15:23:16 **** Incremental Build of configuration Debug for project Integration_Rx ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+In file included from ../Core/Src/main.c:28:
+../Core/Inc/HAL/HAL_LCD.h:72: warning: "RIGHT" redefined
+   72 | #define RIGHT                                                                   0
+      | 
+In file included from ../Core/Src/main.c:25:
+../Core/Inc/HAL/dc_motor.h:29: note: this is the location of the previous definition
+   29 | #define RIGHT                   3
+      | 
+In file included from ../Core/Src/main.c:28:
+../Core/Inc/HAL/HAL_LCD.h:73: warning: "LEFT" redefined
+   73 | #define LEFT                                                                    1
+      | 
+In file included from ../Core/Src/main.c:25:
+../Core/Inc/HAL/dc_motor.h:30: note: this is the location of the previous definition
+   30 | #define LEFT                    4
+      | 
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:140:36: warning: pointer targets in passing argument 1 of 'LCD_voidWriteSting' differ in signedness [-Wpointer-sign]
+  140 |                 LCD_voidWriteSting("Heloo", 0);
+      |                                    ^~~~~~~
+      |                                    |
+      |                                    char *
+In file included from ../Core/Src/main.c:28:
+../Core/Inc/HAL/HAL_LCD.h:163:34: note: expected 'uint8_t *' {aka 'unsigned char *'} but argument is of type 'char *'
+  163 | void LCD_voidWriteSting(uint8_t *Copy_uint8_tstring ,  uint8_t Copy_uint8_tLine );
+      |                         ~~~~~~~~~^~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:145:39: warning: passing argument 1 of 'LCD_voidDisplayNumber' makes integer from pointer without a cast [-Wint-conversion]
+  145 |                 LCD_voidDisplayNumber(Data_Organized);
+      |                                       ^~~~~~~~~~~~~~
+      |                                       |
+      |                                       uint8_t * {aka unsigned char *}
+In file included from ../Core/Src/main.c:28:
+../Core/Inc/HAL/HAL_LCD.h:164:37: note: expected 'uint32_t' {aka 'long unsigned int'} but argument is of type 'uint8_t *' {aka 'unsigned char *'}
+  164 | void LCD_voidDisplayNumber(uint32_t Copy_uint8_tDATA);
+      |                            ~~~~~~~~~^~~~~~~~~~~~~~~~
+../Core/Src/main.c: In function 'APP_voidTakeDecision':
+../Core/Src/main.c:473:39: warning: passing argument 1 of 'LCD_voidDisplayNumber' makes integer from pointer without a cast [-Wint-conversion]
+  473 |                 LCD_voidDisplayNumber(Data_Organized);
+      |                                       ^~~~~~~~~~~~~~
+      |                                       |
+      |                                       uint8_t * {aka unsigned char *}
+In file included from ../Core/Src/main.c:28:
+../Core/Inc/HAL/HAL_LCD.h:164:37: note: expected 'uint32_t' {aka 'long unsigned int'} but argument is of type 'uint8_t *' {aka 'unsigned char *'}
+  164 | void LCD_voidDisplayNumber(uint32_t Copy_uint8_tDATA);
+      |                            ~~~~~~~~~^~~~~~~~~~~~~~~~
+arm-none-eabi-gcc -o "Integration_Rx.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\NTI_GradProject\NTI_Final-Project\CubeIDE\Integration_Rx\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Integration_Rx.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Integration_Rx.elf
+ 
+arm-none-eabi-size   Integration_Rx.elf 
+arm-none-eabi-objdump -h -S  Integration_Rx.elf  > "Integration_Rx.list"
+arm-none-eabi-objcopy  -O ihex  Integration_Rx.elf  "Integration_Rx.hex"
+   text	   data	    bss	    dec	    hex	filename
+  24328	    120	   2232	  26680	   6838	Integration_Rx.elf
+Finished building: default.size.stdout
+ 
+Finished building: Integration_Rx.hex
+ 
+Finished building: Integration_Rx.list
+ 
+
+15:23:18 Build Finished. 0 errors, 5 warnings. (took 1s.377ms)
+
