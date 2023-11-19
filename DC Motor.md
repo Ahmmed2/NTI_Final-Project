@@ -23,7 +23,8 @@ A DC motor is an electric motor that converts direct current (DC) electrical ene
 1. Connect VCC and GND to the power supply.
 - DC Motor VCC pin to power supply positive terminal (Power Supply)
 - DC Motor GND pin to power supply negative terminal (Ground)
-2 .Connect control pins to the microcontroller or motor driver.
+
+2. Connect control pins to the microcontroller or motor driver.
 - DC Motor IN1 pin to microcontroller GPIO pin or motor driver input pin
 - DC Motor IN2 pin to microcontroller GPIO pin or motor driver input pin
 - DC Motor PWM pin to microcontroller PWM output pin or motor driver PWM input pin
