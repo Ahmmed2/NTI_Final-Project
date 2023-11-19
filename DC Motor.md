@@ -1,4 +1,4 @@
-DC Motor Documentation
+# DC Motor Documentation
 
 
 ## 1. Introduction
