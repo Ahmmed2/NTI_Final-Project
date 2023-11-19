@@ -37,10 +37,10 @@ A DC motor is an electric motor that converts direct current (DC) electrical ene
 ## 3. Configuration
 
 ### Direction Control
-1.Set the control pins to the desired logic levels to control the motor's direction.
+Set the control pins to the desired logic levels to control the motor's direction.
 For example, setting IN1 to HIGH and IN2 to LOW may rotate the motor in one direction, while setting IN1 to LOW and IN2 to HIGH may rotate it in the opposite direction.
-Speed Control
-2.Set the duty cycle of the PWM signal to control the motor's speed. Higher duty cycles result in faster speeds, while lower duty cycles result in slower speeds.
+### Speed Control
+Set the duty cycle of the PWM signal to control the motor's speed. Higher duty cycles result in faster speeds, while lower duty cycles result in slower speeds.
 
 ## 4. Motor Operation
 
