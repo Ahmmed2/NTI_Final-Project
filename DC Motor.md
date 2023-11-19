@@ -5,7 +5,7 @@
 ### Overview
 A DC motor is an electric motor that converts direct current (DC) electrical energy into mechanical motion. It is widely used in various applications, including robotics, automation, and motor control systems.
 
-###Features
+### Features
 - Operating Voltage: Typically 3-24V (Depends on the motor model)
 - Speed Control: Can be controlled by varying the voltage or using pulse width modulation (PWM)
 - Direction Control: Can be controlled by reversing the polarity of the power supply or using an H-bridge circuit
@@ -39,6 +39,7 @@ A DC motor is an electric motor that converts direct current (DC) electrical ene
 ### Direction Control
 Set the control pins to the desired logic levels to control the motor's direction.
 For example, setting IN1 to HIGH and IN2 to LOW may rotate the motor in one direction, while setting IN1 to LOW and IN2 to HIGH may rotate it in the opposite direction.
+
 ### Speed Control
 Set the duty cycle of the PWM signal to control the motor's speed. Higher duty cycles result in faster speeds, while lower duty cycles result in slower speeds.
 
