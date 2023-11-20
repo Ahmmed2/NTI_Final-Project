@@ -9,8 +9,8 @@
 ../Core/Src/main.c:557:13:MX_GPIO_Init	1
 ../Core/Src/main.c:621:6:StartDefaultTask	1
 ../Core/Src/main.c:639:6:Init_Task	2
-../Core/Src/main.c:672:6:DataGathering_Task	2
-../Core/Src/main.c:700:6:VehicleComm_Task	5
-../Core/Src/main.c:723:6:ActionDecision_Callback	10
-../Core/Src/main.c:807:6:Mode_Callback	3
-../Core/Src/main.c:835:6:Error_Handler	1
+../Core/Src/main.c:674:6:DataGathering_Task	2
+../Core/Src/main.c:702:6:VehicleComm_Task	5
+../Core/Src/main.c:725:6:ActionDecision_Callback	10
+../Core/Src/main.c:809:6:Mode_Callback	3
+../Core/Src/main.c:837:6:Error_Handler	1

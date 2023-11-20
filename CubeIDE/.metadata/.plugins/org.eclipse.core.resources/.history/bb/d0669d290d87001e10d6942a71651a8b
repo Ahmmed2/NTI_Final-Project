@@ -657,8 +657,6 @@ void Init_Task(void const * argument)
 	    }
 	    HAL_UART_Receive_IT(&huart1,&rxData,1); // Enabling interrupt receive
 
-	    osTimerStart(ActionDecision_TimerHandle, 1.6);
-	    osTimerStart(Mode_TimerHandle, 1.3);
 	    osThreadTerminate(Init_SystemHandle); //delete task
   }
   /* USER CODE END Init_Task */
@@ -716,7 +714,7 @@ void VehicleComm_Task(void const * argument)
 		  NRF_voidSendData (Rx_data, 8 ,NRF_NUMBERS_EXIST  );
 	  }
 	  osSemaphoreRelease(Mode_SemHandle);
-    osDelay(2);
+    osDelay(1);
   }
   /* USER CODE END VehicleComm_Task */
 }
