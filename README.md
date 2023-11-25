@@ -6,14 +6,14 @@
   2- Both are in a straight line. 
   ## Requirements:
   1- Data to be sent: 
-    •	Speed.
-    •	Distance.
-    •	Indicator. 
-      o	Traffic.
-      o	Brake.
-      o	Obstacle.
-    •	Direction.
-    •	Location. 
+    -	Speed.
+    -	Distance.
+    -	Indicator. 
+      -	Traffic.
+      -	Brake.
+      -	Obstacle.
+    -	Direction.
+    -	Location. 
   ## Modes of operation:
   1-	Normal mode: CAR 2 is still out of range so no communication yet and each act based on its own data.
   2-	Communication mode (if CAR 2 is within the communication range): CAR 1 sends data to CAR 2. 
@@ -33,13 +33,13 @@
 
   ### Normal Mode :
    - Normal Vehicle Action (Moving Vehicle) : 
-     • Depends on Blutooth Module Orders to Keep in motion. 
-     • Poll Ultrasonic Readings , The Vehicle decides if it continues in Motion or Stop if Ulltrasonic Reading detects obstacles”.
+     - Depends on Blutooth Module Orders to Keep in motion. 
+     - Poll Ultrasonic Readings , The Vehicle decides if it continues in Motion or Stop if Ulltrasonic Reading detects obstacles”.
 
   ### Communication Mode :
    - Check the range of Car2  
-     • Within range -> Sends Data with NRF to Car2. 
-     •	Out of range ->  Return to Normal Mode. 
+     - Within range -> Sends Data with NRF to Car2. 
+     -	Out of range ->  Return to Normal Mode. 
         
   ### Dominant Mode (Crash) :
    - Car 1 is going to crash (according to reading from Ultrasonic) and takes Full Control of Car2 (With permission)(Platooning mode ).
