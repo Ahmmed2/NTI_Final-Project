@@ -24,11 +24,9 @@ extern uint32_t pMillis;
 /* UltraSonic Directions */
 
 #define US_FORWARD			0
-#define US_RIGHT			1
+#define US_BACKWARD			1
 #define US_LEFT				2
-#define US_BACKWARD			3
-
-
+#define US_RIGHT			3
 
 typedef struct {
     GPIO_TypeDef* trigPort;

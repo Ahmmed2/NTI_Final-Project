@@ -92,12 +92,14 @@ int main(void)
 
   /* USER CODE END SysInit */
 
+
+  /* USER CODE BEGIN 2 */
+
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_SPI1_Init();
   NRF_voidInit();
   NRF_voidReceiverMode(RxAddress, 10 ) ;
-  /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
 
@@ -227,7 +229,7 @@ void APP_voidNRF_OrganizedData (void)
 	  /* Data is Available */
 	  if (NRF_u8IsDataAvailable(1) == 1 )
 	  {
-		  //NRF_voidReceiveData(Rx_Data) ;
+		  NRF_voidReceiveData(Rx_Data) ;
 
 		  while (Rx_Data[Size_In_Bytes] != '+' )
 		  {

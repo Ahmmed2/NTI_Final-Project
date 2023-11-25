@@ -126,10 +126,10 @@ uint8_t NRF_u8ReadByteReg(uint8_t Copy_u8Reg)
 	NRF_ChipSelect() ;
 
 	/* Receive Data */
-	HAL_SPI_Transmit(NRF_SPI1,&Copy_u8Reg,1,100 ) ;
-	HAL_Delay(100) ;
-	HAL_SPI_Receive(NRF_SPI1,&Local_Data,1,1000) ;
-	HAL_Delay(100) ;
+	HAL_SPI_Transmit(NRF_SPI1,&Copy_u8Reg,1,10000 ) ;
+//	HAL_Delay(100) ;
+	HAL_SPI_Receive(NRF_SPI1,&Local_Data,1,10000) ;
+//	HAL_Delay(100) ;
 
 	/* Release"Unselect" device */
 	NRF_ChipUnSelect () ;
@@ -309,6 +309,7 @@ void NRF_voidSendData (uint8_t * Data , uint8_t Copy_u8SizeinByte ,uint8_t Copy_
    HAL_SPI_Transmit(NRF_SPI1, &Temp, 1 , 100) ;
 
    /* Always First Byte is Character */
+
    Send_Data[0] = Data[0] ;
    Local_ArrayIndex ++ ;
 
@@ -317,7 +318,15 @@ void NRF_voidSendData (uint8_t * Data , uint8_t Copy_u8SizeinByte ,uint8_t Copy_
 	   /* Number(s) */
 	   for (Local_Counter = 1 ; Local_Counter < Copy_u8SizeinByte ; Local_Counter++ )
 	   {
-		   Local_ArrayIndex= HAL_NRF_Send_Number(Data[Local_Counter] ,Local_Counter ) ;
+
+
+		   if (Data[Local_Counter] == 'S' || Data[Local_Counter] == 'D' || Data[Local_Counter] == 'M' || Data[Local_Counter] == 'I' )
+		   {
+		   Send_Data[Local_ArrayIndex] = Data[Local_Counter] ;
+		   Local_ArrayIndex ++ ;
+
+		   }
+		   else Local_ArrayIndex = HAL_NRF_Send_Number(Data[Local_Counter] ,Local_ArrayIndex ) ;
 	   }
 
    }
@@ -332,7 +341,7 @@ void NRF_voidSendData (uint8_t * Data , uint8_t Copy_u8SizeinByte ,uint8_t Copy_
 	NRF_ChipUnSelect() ;
 
 	/* Delay */
-	HAL_Delay(1) ;
+	//HAL_Delay(1) ;
 
 	/* Check if TX Buffer is empty or not */
 	uint8_t Local_FIFOStatus ;
@@ -351,6 +360,8 @@ void NRF_voidSendData (uint8_t * Data , uint8_t Copy_u8SizeinByte ,uint8_t Copy_
 
 		// Reset FIFO_STATUS
 		NRF_voidResetNRF(FIFO_STATUS) ;
+
+		HAL_UART_Transmit(&huart1,"N",1,100);
 
 	}
 
@@ -397,7 +408,7 @@ uint8_t HAL_NRF_Send_Number(uint32_t Copy_u32Number , uint8_t Copy_u8Number_Inde
     }
 
 	}
-    /* Copy the elements of Main_Arr --> Reverted_Arr then send them to UART in correct order */
+    /* Copy the elements of Main_Arr --> Reverted_Arr  */
 
     for (uint8_t Revert_Index = 0 ; Revert_Index<Local_u8Number_Element ; Revert_Index++)
     {

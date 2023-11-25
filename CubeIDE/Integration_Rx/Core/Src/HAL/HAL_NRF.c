@@ -3,7 +3,7 @@
  *
  *  Created on: Nov 1, 2023
  *      Author: Ahmed
- *      Tx NRF "CAR1"
+ *      Rx NRF "CAR1"
  *
  *      Tested in 11-11-2023
  *      Version 1
@@ -127,9 +127,9 @@ uint8_t NRF_u8ReadByteReg(uint8_t Copy_u8Reg)
 
 	/* Receive Data */
 	HAL_SPI_Transmit(NRF_SPI1,&Copy_u8Reg,1,100 ) ;
-	HAL_Delay(100) ;
+	//HAL_Delay(100) ;
 	HAL_SPI_Receive(NRF_SPI1,&Local_Data,1,1000) ;
-	HAL_Delay(100) ;
+	//HAL_Delay(100) ;
 
 	/* Release"Unselect" device */
 	NRF_ChipUnSelect () ;
@@ -269,7 +269,7 @@ void NRF_voidTransmitterMode (uint8_t * Address ,uint8_t Copy_u8Channel_Number )
 	Temp = NRF_u8ReadByteReg(CONFIG);
 	Temp = Temp | (1<<1) | (0<<0) ;   // 0b0000 0010
 	NRF_voidWriteByteReg(CONFIG,0x02) ;
-	HAL_Delay(100) ;
+	//HAL_Delay(100) ;
 
 	/* Enable Chip */
 	NRF_ChipEnable () ;
@@ -332,7 +332,7 @@ void NRF_voidSendData (uint8_t * Data , uint8_t Copy_u8SizeinByte ,uint8_t Copy_
 	NRF_ChipUnSelect() ;
 
 	/* Delay */
-	HAL_Delay(1) ;
+	//HAL_Delay(1) ;
 
 	/* Check if TX Buffer is empty or not */
 	uint8_t Local_FIFOStatus ;
@@ -520,7 +520,7 @@ void NRF_voidReceiveData (uint8_t * Data )
 	NRF_ChipUnSelect() ;
 
 	/* Delay */
-	HAL_Delay(1) ;
+	//HAL_Delay(1) ;
 
 	/* Flush RX FIFO */
 	Local_Temp = FLUSH_RX ;

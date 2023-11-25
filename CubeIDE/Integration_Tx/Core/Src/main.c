@@ -58,7 +58,9 @@ UART_HandleTypeDef huart3;
 uint8_t Car_State = STATE_STATIONARY ;
 uint8_t Car_Direction  ;
 uint8_t Car_Speed  ;
+uint8_t Car_indication ;
 uint8_t System_Mode = Stationary_Mode ;
+
 
 /* BM Receive Variable */
 uint8_t rxData ;
@@ -145,16 +147,7 @@ int main(void)
   HAL_voidUltraSonicInit() ;
   HAL_UART_Receive_IT(&huart1,&rxData,1); // Enabling interrupt receive
   NRF_voidInit();
-  GSM_VidInit();
-  GSM_VidCheckConnection();
   NRF_voidTransmitterMode (TxAddress ,10 );
-
-  Data_Tx.Speed 	 = 0 						;  /* Input from MOTION Branch     */
-  Data_Tx.Direction  = FORWARD 					;  /* Input from MOTION Branch     */
-  Data_Tx.Distance 	 = 0						;  /* Input from ULTRASONIC Branch */
-  Data_Tx.Indication = INDICATION_NORMAL 	    ;  /* Input from Emergency		   */
-
-  Data_Sent[6]     = Data_States[3]				;  /* Indication */
 
   /* USER CODE END 2 */
 
@@ -484,7 +477,7 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, TRIG_F_Pin|NRF_CE_Pin|NRF_CSN_Pin|IN1_Pin
@@ -510,8 +503,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : Emergency_button_Pin PA4 */
-  GPIO_InitStruct.Pin = Emergency_button_Pin|GPIO_PIN_4;
+  /*Configure GPIO pin : PA4 */
+  GPIO_InitStruct.Pin = GPIO_PIN_4;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
@@ -552,7 +545,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
   if(huart->Instance==USART1)
   {
-
 	  APP_voidTakeDecision (rxData) ;
   }
 }
@@ -603,15 +595,7 @@ void APP_voidTakeDecision (uint8_t Copy_u8rxData)
 	}
 
 	HAL_UART_Receive_IT(&huart1,&rxData,1); // Enabling interrupt receive again
-	APP_voidModeUpdate();
-	if(System_Mode == Comm_Mode || System_Mode == Dominant_Mode)
-	{
-		NRF_voidSendData (Data_Sent, 8 ,NRF_NUMBERS_EXIST);
-	}
-	if(System_Mode == Emergency_Mode && HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_3))
-	{
-		GSM_VidSendSMS((uint8_t*)"01003676020", (uint8_t*)"Robbery is Happening");
-	}
+
 }
 
 /**
@@ -653,7 +637,6 @@ void APP_voidModeUpdate()
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 
-
 	TMR_Counter ++ ;
 
     /* Reading of all UltraSonic */
@@ -664,46 +647,53 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 	if (US_Decision == 254)
 	{
-		Data_Tx.Indication = Normal_Mode 	;
+		Car_indication = Normal_Mode 	;
 		HAL_voidControlMotors(Normal_SPEED,Car_Direction) ;
 		Car_Speed = Normal_SPEED ;
-		HAL_UART_Transmit(&huart1,(uint8_t*)"D",1,100);
+
 	}
 	else if (US_Decision == STOP)
 	{
-		Data_Tx.Indication = INDICATION_SUDDEN_BRAKE 	;
+		Car_indication = INDICATION_SUDDEN_BRAKE 	;
 		HAL_voidControlMotors(SPEED_0,STOP) ;
 		Car_Speed = SPEED_0 ;
-		HAL_UART_Transmit(&huart1,(uint8_t*)"P",1,100);
+
 	}
 	else if (US_Decision == SPEED_25)
 	{
-		Data_Tx.Indication = INDICATION_OBSTACLE 	;
+		Car_indication = INDICATION_OBSTACLE 	;
 		HAL_voidControlMotors(SPEED_25,Car_Direction) ;
 		Car_Speed = SPEED_25 ;
-		HAL_UART_Transmit(&huart1,(uint8_t*)"S",1,100);
+
 	}
 
       /* Update NRF values*/
-      Data_Tx.Distance = US_ARR[3] 							;  /* Backward UltraSonic reading */
-	  Data_Sent[4]     = Data_States[2]						;  /* Distance  */
-	  Data_Sent[5]     = Data_Tx.Distance				    ;
-	  Data_Tx.Speed 	 = Car_Speed						;
-	  Data_Tx.Direction  = Car_Direction 					;
 
-	  Data_Sent[0] = Data_States[0]							;	/* Speed */
-	  Data_Sent[1] = Data_Tx.Speed							;
-	  Data_Sent[2] = Data_States[1]							;	/* Direction */
-	  Data_Sent[3] = Data_Tx.Direction						;
-	  Data_Sent[7] = Data_Tx.Indication						;
+	  Data_Sent[0]     = Data_States[0]						;	/* Speed */
+	  Data_Sent[1]     = Car_Speed							;
+	  Data_Sent[2]     = Data_States[1]						;	/* Direction */
+	  Data_Sent[3]     = Car_Direction						;
+	  Data_Sent[4]     = Data_States[2]						;  /* Distance  */
+	  Data_Sent[5]     = US_ARR[3]				       		;  /* Backward UltraSonic reading */
+	  Data_Sent[6]     = Data_States[3]						;
+	  Data_Sent[7]     = Car_indication						;
+
+
+	  APP_voidModeUpdate();
+		if(System_Mode == Comm_Mode || System_Mode == Dominant_Mode)
+		{
+			NRF_voidSendData (Data_Sent, 8 ,NRF_NUMBERS_EXIST);
+		}
+		if(System_Mode == Emergency_Mode && HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_3))
+		{
+			GSM_VidSendSMS((uint8_t*)"01003676020", (uint8_t*)"Robbery is Happening");
+		}
 
 
 	/* Delay 2 Second */
 	if (TMR_Counter == 10 )
 	  {
 		TMR_Counter = 0 ;
-		HAL_voidControlMotors(SPEED_0 , STOP ) 	  ;
-		HAL_TIM_Base_Stop_IT(&htim3)  ;
 
 	  }
 

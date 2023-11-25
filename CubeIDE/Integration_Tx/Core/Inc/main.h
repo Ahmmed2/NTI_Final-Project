@@ -65,8 +65,6 @@ void Error_Handler(void);
 #define NRF_CE_GPIO_Port GPIOA
 #define NRF_CSN_Pin GPIO_PIN_2
 #define NRF_CSN_GPIO_Port GPIOA
-#define Emergency_button_Pin GPIO_PIN_3
-#define Emergency_button_GPIO_Port GPIOA
 #define TRIG_R_Pin GPIO_PIN_0
 #define TRIG_R_GPIO_Port GPIOB
 #define EN2_Pin GPIO_PIN_12

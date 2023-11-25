@@ -9,7 +9,6 @@
 
 #include "HAL/Ultrasonic.h"
 #include "HAL/DC_MOTOR.h"
-#include "HAL/GSM.h"
 
 extern UART_HandleTypeDef huart1;;
 extern TIM_HandleTypeDef htim2;
@@ -120,16 +119,15 @@ uint8_t HAL_UltraSonic_Decision(uint16_t *UltraSonic_Reading)
 	uint8_t Return_Value = 254 ;
 
 	/* About to Hit */
-	if ( (UltraSonic_Reading[US_FORWARD]<= 10) )
+	if ( (UltraSonic_Reading[0]<= 20) )
 	{
 		HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_RESET);
 		Return_Value = STOP ;
-		GSM_VidSendSMS((uint8_t*)"01003676020", (uint8_t*)"SOS");
 
 	}
 
 	/* Close to Hit */
-	else if ((20 < UltraSonic_Reading[US_FORWARD]) &&  (UltraSonic_Reading[US_FORWARD]<= 30) )
+	else if ((20 < UltraSonic_Reading[0]) &&  (UltraSonic_Reading[0]<= 30) )
 	{
 		HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_RESET);
 		Return_Value = SPEED_25 ;

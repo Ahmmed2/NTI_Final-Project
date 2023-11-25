@@ -1,0 +1,3 @@
+../Core/Src/HAL/GSM.c:29:6:GSM_VidInit	3
+../Core/Src/HAL/GSM.c:45:9:GSM_VidCheckConnection	10
+../Core/Src/HAL/GSM.c:127:9:GSM_VidSendSMS	1

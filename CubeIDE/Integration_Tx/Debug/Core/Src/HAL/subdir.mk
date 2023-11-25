@@ -6,16 +6,22 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../Core/Src/HAL/DC_MOTOR.c \
+../Core/Src/HAL/GSM.c \
+../Core/Src/HAL/HAL_LCD.c \
 ../Core/Src/HAL/HAL_NRF.c \
 ../Core/Src/HAL/Ultrasonic.c 
 
 OBJS += \
 ./Core/Src/HAL/DC_MOTOR.o \
+./Core/Src/HAL/GSM.o \
+./Core/Src/HAL/HAL_LCD.o \
 ./Core/Src/HAL/HAL_NRF.o \
 ./Core/Src/HAL/Ultrasonic.o 
 
 C_DEPS += \
 ./Core/Src/HAL/DC_MOTOR.d \
+./Core/Src/HAL/GSM.d \
+./Core/Src/HAL/HAL_LCD.d \
 ./Core/Src/HAL/HAL_NRF.d \
 ./Core/Src/HAL/Ultrasonic.d 
 
@@ -27,7 +33,7 @@ Core/Src/HAL/%.o Core/Src/HAL/%.su Core/Src/HAL/%.cyclo: ../Core/Src/HAL/%.c Cor
 clean: clean-Core-2f-Src-2f-HAL
 
 clean-Core-2f-Src-2f-HAL:
-	-$(RM) ./Core/Src/HAL/DC_MOTOR.cyclo ./Core/Src/HAL/DC_MOTOR.d ./Core/Src/HAL/DC_MOTOR.o ./Core/Src/HAL/DC_MOTOR.su ./Core/Src/HAL/HAL_NRF.cyclo ./Core/Src/HAL/HAL_NRF.d ./Core/Src/HAL/HAL_NRF.o ./Core/Src/HAL/HAL_NRF.su ./Core/Src/HAL/Ultrasonic.cyclo ./Core/Src/HAL/Ultrasonic.d ./Core/Src/HAL/Ultrasonic.o ./Core/Src/HAL/Ultrasonic.su
+	-$(RM) ./Core/Src/HAL/DC_MOTOR.cyclo ./Core/Src/HAL/DC_MOTOR.d ./Core/Src/HAL/DC_MOTOR.o ./Core/Src/HAL/DC_MOTOR.su ./Core/Src/HAL/GSM.cyclo ./Core/Src/HAL/GSM.d ./Core/Src/HAL/GSM.o ./Core/Src/HAL/GSM.su ./Core/Src/HAL/HAL_LCD.cyclo ./Core/Src/HAL/HAL_LCD.d ./Core/Src/HAL/HAL_LCD.o ./Core/Src/HAL/HAL_LCD.su ./Core/Src/HAL/HAL_NRF.cyclo ./Core/Src/HAL/HAL_NRF.d ./Core/Src/HAL/HAL_NRF.o ./Core/Src/HAL/HAL_NRF.su ./Core/Src/HAL/Ultrasonic.cyclo ./Core/Src/HAL/Ultrasonic.d ./Core/Src/HAL/Ultrasonic.o ./Core/Src/HAL/Ultrasonic.su
 
 .PHONY: clean-Core-2f-Src-2f-HAL
 

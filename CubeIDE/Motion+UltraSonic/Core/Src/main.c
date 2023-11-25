@@ -586,25 +586,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	  }
 
 }
-void APP_voidAction (uint8_t Copy_u8Action , uint8_t Copy_u8Direction)
-{
-	/* NO Obstacle is Close */
-	if (Copy_u8Action == 254)
-	{
 
-		HAL_voidControlMotors(Normal_SPEED,Copy_u8Direction) ;
-	}
-	else if (Copy_u8Action == STOP)
-	{
-
-		HAL_voidControlMotors(SPEED_0,STOP) ;
-	}
-	else if (Copy_u8Action == SPEED_25)
-	{
-		HAL_voidControlMotors(SPEED_25,Copy_u8Direction) ;
-	}
-
-}
 
 /* USER CODE END 4 */
 
