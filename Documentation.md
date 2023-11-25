@@ -1,7 +1,12 @@
 # NTI_Graduation-Project [V2V Communication]:
   ## Purpose:
-  CAR 1 sends data to CAR 2 and act accordingly to avoid accidents. 
-  ## Assumptions:
+  Establishing a communication model that exchanges information between vehicles and the highway system infrastructure. Infrastructure components include road     
+  signs, lane markings, traffic lights, and other smart road infrastructure connected via wireless connection in order to:
+  1. Reducing road accidents and fatalities.
+  2. Optimizing traffic flow.
+  3. Adjusting traffic signals and speed limits.
+  4. Reduce the environmental impact of transportation.  
+  ## Implementation Assumptions :
   1. Car 1 (Master) always leads Car 2 (Slave).
   2. Both are in a straight line. 
   ## Requirements:
