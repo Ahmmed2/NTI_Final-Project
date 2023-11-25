@@ -4,4 +4,5 @@
 //org.eclipse.debug.core.PREFERRED_DELEGATES/org.eclipse.cdt.launch.postmortemLaunchType=org.eclipse.cdt.dsf.gdb.launch.coreCLaunch,debug,;
 //org.eclipse.debug.core.PREFERRED_DELEGATES/org.eclipse.cdt.launch.remoteApplicationLaunchType=org.eclipse.rse.remotecdt.dsf.debug,debug,;
 eclipse.preferences.version=1
-prefWatchExpressions=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<watchExpressions/>\r\n
+org.eclipse.debug.core.PREF_BREAKPOINT_MANAGER_ENABLED_STATE=false
+prefWatchExpressions=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<watchExpressions>\r\n    <expression enabled\="true" text\="distance1"/>\r\n    <expression enabled\="true" text\="distance2"/>\r\n    <expression enabled\="true" text\="Send_Data"/>\r\n    <expression enabled\="true" text\="US_ARR"/>\r\n    <expression enabled\="true" text\="Data_Sent"/>\r\n</watchExpressions>\r\n

@@ -1,0 +1,17 @@
+../Core/Src/HAL/HAL_NRF.c:20:6:NRF_ChipSelect	1
+../Core/Src/HAL/HAL_NRF.c:25:6:NRF_ChipUnSelect	1
+../Core/Src/HAL/HAL_NRF.c:31:6:NRF_ChipEnable	1
+../Core/Src/HAL/HAL_NRF.c:36:6:NRF_ChipDisable	1
+../Core/Src/HAL/HAL_NRF.c:55:6:NRF_voidWriteByteReg	1
+../Core/Src/HAL/HAL_NRF.c:89:6:NRF_voidWriteMultiByteReg	1
+../Core/Src/HAL/HAL_NRF.c:120:9:NRF_u8ReadByteReg	1
+../Core/Src/HAL/HAL_NRF.c:152:6:NRF_voidReadMultiByteReg	1
+../Core/Src/HAL/HAL_NRF.c:182:6:NRF_voidCommandSet	1
+../Core/Src/HAL/HAL_NRF.c:207:6:NRF_voidInit	1
+../Core/Src/HAL/HAL_NRF.c:256:6:NRF_voidTransmitterMode	1
+../Core/Src/HAL/HAL_NRF.c:296:6:NRF_voidSendData	9
+../Core/Src/HAL/HAL_NRF.c:390:9:HAL_NRF_Send_Number	4
+../Core/Src/HAL/HAL_NRF.c:436:6:NRF_voidReceiverMode	1
+../Core/Src/HAL/HAL_NRF.c:484:9:NRF_u8IsDataAvailable	3
+../Core/Src/HAL/HAL_NRF.c:518:6:NRF_voidReceiveData	1
+../Core/Src/HAL/HAL_NRF.c:556:6:NRF_voidResetNRF	3

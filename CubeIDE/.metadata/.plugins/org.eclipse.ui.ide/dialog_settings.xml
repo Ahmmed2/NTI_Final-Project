@@ -11,4 +11,20 @@
 		<list key="ENABLED_TRANSFERS">
 		</list>
 	</section>
+	<section name="SmartImportWizard">
+		<item key="SmartImportRootWizardPage.STORE_HIDE_ALREADY_OPEN" value="false"/>
+		<item key="SmartImportRootWizardPage.STORE_CLOSE_IMPORTED" value="false"/>
+		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
+		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
+		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="C:\Users\Ahmed\Desktop\New folder (2)\NTI_Final-Project\CubeIDE\RTOS_Tx"/>
+			<item value="C:\Users\Ahmed\Desktop\Integration_Txx"/>
+			<item value="C:\Users\Ahmed\Desktop\Integration_Txx\Debug"/>
+			<item value="C:\Users\Ahmed\Desktop\NTI_Final-Project\CubeIDE\Integration_Tx"/>
+			<item value="C:\Users\Ahmed\Desktop\NTI_Final-Project\CubeIDE\ULTRASONIC_TEST"/>
+			<item value="C:\Users\Ahmed\Desktop\NTI_Final-Project\CubeIDE\Main_Final-Project"/>
+			<item value="C:\Users\Ahmed\Desktop\NTI_Final-Project\CubeIDE\Main_Tx"/>
+			<item value="D:\Courses\NTI\NTI_Final-Project\NTI_Final-Project\CubeIDE\Integration_Tx"/>
+		</list>
+	</section>
 </section>
